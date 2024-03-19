@@ -26,7 +26,7 @@ const HomeNavbar = () => {
   return (
     <header
       aria-checked={scrolled}
-      className="w-full fixed duration-200 top-0 bg-transparent aria-checked:bg-[hsla(0,0%,10%,0.9)] aria-checked:backdrop-blur"
+      className="w-full fixed duration-200 top-0 bg-transparent z-40 aria-checked:bg-[hsla(0,0%,10%,0.9)] aria-checked:backdrop-blur border-b-[hsla(0,0%,16%)] aria-checked:border-b-1"
     >
       <AppContainer className="h-20 flex items-center justify-between">
         <h3
@@ -44,8 +44,9 @@ const HomeNavbar = () => {
             classNames={{
               innerWrapper: "gap-1",
             }}
+            size="lg"
             placeholder="Search here..."
-            className=" max-w-96"
+            className=" max-w-[500px]"
             radius="full"
             fullWidth
           />
