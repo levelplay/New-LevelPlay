@@ -26,6 +26,7 @@ const TikTakTokGame = () => {
     <main>
       <GameNavBar
         activeUser={turn}
+        onTimeUp={() => {}}
         users={[
           {
             title: "Demi Wilkinson",

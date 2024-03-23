@@ -11,15 +11,17 @@ interface DataModel {
     description: string;
   }[];
   activeUser?: number;
+  onTimeUp: () => void;
 }
 
-const GameNavBar: FC<DataModel> = ({ users, activeUser }) => {
+const GameNavBar: FC<DataModel> = ({ users, activeUser, onTimeUp }) => {
   const [time, setTime] = useState(0);
   Chart.register(ArcElement);
 
   useEffect(() => {
     setTimeout(() => {
       if (time == 0) {
+        onTimeUp();
       } else {
         setTime(time - 1);
       }
