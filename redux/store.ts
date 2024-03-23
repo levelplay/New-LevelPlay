@@ -2,10 +2,12 @@ import { combineReducers } from "redux";
 import { configureStore } from '@reduxjs/toolkit';
 import modelReducer, { modelInitialState } from './model/controller';
 import toastReducer, { toastInitialState } from './toast/controller';
+import authReducer from './auth/controller';
 
 const rootReducer = combineReducers({
     model: modelReducer,
     toast: toastReducer,
+    auth: authReducer
 });
 
 export type RootReducerType = ReturnType<typeof rootReducer>;
