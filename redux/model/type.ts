@@ -8,4 +8,6 @@ export type modelStatusType =
     'close' |
     'signIn' |
     'signUp' |
-    'forget-password';
+    'forget-password' |
+    'leader-board' |
+    'game-start';

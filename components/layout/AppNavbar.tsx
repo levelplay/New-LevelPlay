@@ -8,7 +8,7 @@ import { changeModelStatus } from "@/redux/model/controller";
 
 const AppNavbar = () => {
   return (
-    <header className="w-full bg-opacity-80 backdrop-blur sticky top-0 bg-[#242424]">
+    <header className="w-full bg-opacity-80 backdrop-blur sticky top-0 bg-[hsla(0,0%,10%,0.9)]">
       <AppContainer className="h-20 flex items-center justify-between">
         <h3 className="text-2xl font-semibold" style={{ letterSpacing: "4px" }}>
           Level Play
