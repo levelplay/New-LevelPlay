@@ -6,24 +6,21 @@ import { showErrorThunk } from "@/redux/toast/controller";
 import { yupResolver } from "@hookform/resolvers/yup";
 import {
   Button,
-  Checkbox,
-  Input,
-  Link,
   Modal,
   ModalBody,
   ModalContent,
   ModalFooter,
-  ModalHeader,
 } from "@nextui-org/react";
 import { FormProvider, useForm } from "react-hook-form";
 import { useSelector } from "react-redux";
 import { changeModelStatus, closeModel } from "@/redux/model/controller";
-import { MdLock, MdMail } from "react-icons/md";
 import FormTextField from "../input/FormTextField";
 import FormPasswordField from "../input/FormPasswordField";
+import { LoginThunk } from "@/redux/auth/controller";
 
 const SignInModel = () => {
   const state = useSelector((e: RootReducerType) => e?.model?.status);
+  const loading = useSelector((e: RootReducerType) => e?.auth?.loading);
   const formSchema = yup.object().shape({
     email: yup
       .string()
@@ -40,7 +37,13 @@ const SignInModel = () => {
   const { handleSubmit, reset } = formMethods;
 
   const submitForm = handleSubmit(
-    (data) => {},
+    (data) => {
+      store.dispatch(LoginThunk(data)).then((result: any)=>{
+        if (result.success) {
+        store.dispatch(closeModel());
+        }
+      });
+    },
     () => {
       store.dispatch(showErrorThunk("Please resolve errors"));
     }
@@ -89,7 +92,7 @@ const SignInModel = () => {
               </div>
             </ModalBody>
             <ModalFooter>
-              <Button color="primary" type="submit" className="my-2" fullWidth>
+              <Button isLoading={loading} color="primary" type="submit" className="my-2" fullWidth>
                 Continue
               </Button>
             </ModalFooter>

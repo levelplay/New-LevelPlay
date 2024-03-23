@@ -6,24 +6,21 @@ import { showErrorThunk } from "@/redux/toast/controller";
 import { yupResolver } from "@hookform/resolvers/yup";
 import {
   Button,
-  Checkbox,
-  Input,
-  Link,
   Modal,
   ModalBody,
   ModalContent,
   ModalFooter,
-  ModalHeader,
 } from "@nextui-org/react";
 import { FormProvider, useForm } from "react-hook-form";
 import { useSelector } from "react-redux";
 import { closeModel } from "@/redux/model/controller";
-import { MdLock, MdMail } from "react-icons/md";
 import FormTextField from "../input/FormTextField";
 import FormPasswordField from "../input/FormPasswordField";
+import { SendTokenThunk, signUpThunk } from "@/redux/auth/controller";
 
 const SignUpModel = () => {
   const state = useSelector((e: RootReducerType) => e?.model?.status);
+  const loading = useSelector((e: RootReducerType) => e?.auth?.loading);
   const formSchema = yup.object().shape({
     email: yup
       .string()
@@ -38,10 +35,24 @@ const SignUpModel = () => {
     resolver: yupResolver(formSchema),
   });
 
-  const { handleSubmit, reset } = formMethods;
+  const { handleSubmit, reset, getValues } = formMethods;
 
   const submitForm = handleSubmit(
-    (data) => {},
+    (data) => {
+      store.dispatch(
+        signUpThunk({
+          email: data.email,
+          password: data.password,
+          code: data.code,
+        })
+      ).then((e: any)=>{
+        console.log(e);
+        if(e.success){
+          store.dispatch(closeModel());
+        }
+      });
+     
+    },
     () => {
       store.dispatch(showErrorThunk("Please resolve errors"));
     }
@@ -74,7 +85,27 @@ const SignUpModel = () => {
                   label: "Verification Code",
                   type: "number",
                   placeholder: "Enter verification code",
-                  endContent: <Button color="primary" className="h-full w-36">Send Code</Button>,
+                  endContent: <Button 
+                  disabled={loading}
+                  isLoading={loading} 
+                  onClick={(e) => {
+                    const email = getValues("email");
+                      if (email && email.length > 0) {
+                        store.dispatch(
+                          SendTokenThunk({
+                            email: email || "",
+                            type: 1,
+                          })
+                        );
+                      } else {
+                        store.dispatch(
+                          showErrorThunk(
+                            "Please fill your email address"
+                          )
+                        );
+                      }
+                  }}
+                  color="primary" className="h-full w-36">Send Code</Button>,
                 }}
               />
               <FormPasswordField
@@ -86,7 +117,7 @@ const SignUpModel = () => {
               />
             </ModalBody>
             <ModalFooter>
-              <Button color="primary" type="submit" className="my-2" fullWidth>
+              <Button isLoading={loading}  color="primary" type="submit" className="my-2" fullWidth>
                 Continue
               </Button>
             </ModalFooter>
