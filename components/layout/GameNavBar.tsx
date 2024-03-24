@@ -10,7 +10,7 @@ interface DataModel {
     title: string;
     description: string;
   }[];
-  activeUser?: number;
+  activeUser: number;
   onTimeUp: () => void;
 }
 
@@ -47,7 +47,7 @@ const GameNavBar: FC<DataModel> = ({ users, activeUser, onTimeUp }) => {
               avatarProps={{
                 className: "w-12 h-12",
                 isBordered: true,
-                color: key == activeUser ? "primary" : "default",
+                color: key == activeUser - 1 ? "primary" : "default",
               }}
             />
           );
