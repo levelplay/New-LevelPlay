@@ -1,28 +1,30 @@
 "use client";
 import GameNavBar from "@/components/layout/GameNavBar";
 import SafetyLayer from "@/components/layout/SafetyLayer";
-import { circleMark, crossMark } from "@/public/images";
+import { circleMark, crossMark, emptyMark } from "@/public/images";
 import { Avatar, User } from "@nextui-org/react";
 import { DRAW_MODES } from "@pixi/core";
-import '@pixi/events'
+import "@pixi/events";
 import { Container, Graphics, Sprite, Stage } from "@pixi/react";
 import React, { useEffect, useState } from "react";
 
 const TikTakTokGame = () => {
-  const [turn, setTurn] = useState();
-  const [containerData, setContainerData] = useState([
-    [1, 2, 1],
-    [0, 1, 2],
-    [2, 0, 1],
-  ]);
-
+  // config
   const boxWidth = 125;
   const dividerWidth = 10;
   const iconWidth = 95;
   const boxPadding = 15;
-  const playerIcon = ["", circleMark.src, crossMark.src];
+  const playerIcon = [emptyMark.src, circleMark.src, crossMark.src];
   const deviceWidth = typeof window == "undefined" ? 0 : window.innerWidth;
   const deviceHeight = typeof window == "undefined" ? 0 : window.innerHeight;
+
+  // state
+  const [turn, setTurn] = useState();
+  const [containerData, setContainerData] = useState([
+    [1, 0, 1],
+    [0, 0, 2],
+    [2, 0, 1],
+  ]);
 
   return (
     <SafetyLayer>
@@ -42,7 +44,6 @@ const TikTakTokGame = () => {
           ]}
         />
         <Stage
-
           className="!w-full !h-screen"
           width={deviceWidth}
           height={deviceHeight}
@@ -105,21 +106,19 @@ const TikTakTokGame = () => {
                       boxWidth * p_key + dividerWidth * p_key,
                     ]}
                   >
-                    {c_item ? (
-                      <Sprite
-                        interactive={true}
-                        onclick={(e)=>{
-                          console.log('click');
-                        }}
-                        x={boxPadding}
-                        y={boxPadding}
-                        width={iconWidth}
-                        height={iconWidth}
-                        image={playerIcon[c_item]}
-                      />
-                    ) : (
-                      <></>
-                    )}
+                    <Sprite
+                      interactive={true}
+                      onclick={(e) => {
+                        const currentData = [...containerData];
+                        currentData[p_key][c_key] = 1;
+                        setContainerData(currentData);
+                      }}
+                      x={boxPadding}
+                      y={boxPadding}
+                      width={iconWidth}
+                      height={iconWidth}
+                      image={playerIcon[c_item]}
+                    />
                   </Container>
                 );
               });

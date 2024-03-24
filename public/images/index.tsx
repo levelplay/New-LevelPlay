@@ -3,5 +3,6 @@ import whiteFavicon from "./white-favicon.png";
 import homeBanner from "./banner.jpeg";
 import circleMark from "./circle-mark.png";
 import crossMark from "./cross-mark.png";
+import emptyMark from './empty-mark.png'
 
-export { blackFavicon, whiteFavicon, homeBanner, crossMark, circleMark };
+export { blackFavicon, whiteFavicon, homeBanner, crossMark, circleMark, emptyMark };
