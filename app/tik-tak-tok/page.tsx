@@ -6,7 +6,7 @@ import { Avatar, User } from "@nextui-org/react";
 import { DRAW_MODES } from "@pixi/core";
 import { Container, Graphics, SimpleMesh, Sprite, Stage } from "@pixi/react";
 import React, { useCallback, useEffect, useState } from "react";
-
+import '@pixi/events'
 const TikTakTokGame = () => {
   const [turn, setTurn] = useState();
   const boxWidth = 125;
@@ -40,6 +40,7 @@ const TikTakTokGame = () => {
       />
       <SafetyLayer>
         <Stage
+
           className="!w-full !h-screen"
           width={window.innerWidth}
           height={window.innerHeight}
@@ -92,15 +93,20 @@ const TikTakTokGame = () => {
                 return (
                   <>
                     <Container
-                      key={`${p_key}${c_key}`}
+                      key={`${p_key}_${c_key}`}
                       width={boxWidth}
                       height={boxWidth}
+                     
                       position={[
                         boxWidth * c_key + dividerWidth * c_key,
                         boxWidth * p_key + dividerWidth * p_key,
                       ]}
                     >
                       <Sprite
+                        interactive={true}
+                        onclick={(e)=>{
+                          console.log('click');
+                        }}
                         x={boxPadding}
                         y={boxPadding}
                         width={iconWidth}
