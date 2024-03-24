@@ -2,53 +2,55 @@
 import GameNavBar from "@/components/layout/GameNavBar";
 import SafetyLayer from "@/components/layout/SafetyLayer";
 import { circleMark, crossMark } from "@/public/images";
-import { Avatar, User } from "@nextui-org/react";
-import { DRAW_MODES } from "@pixi/core";
-import { Container, Graphics, SimpleMesh, Sprite, Stage } from "@pixi/react";
-import React, { useCallback, useEffect, useState } from "react";
+import { Container, Graphics, Sprite, Stage } from "@pixi/react";
+import React, { useEffect, useState } from "react";
 
 const TikTakTokGame = () => {
   const [turn, setTurn] = useState();
+  const [containerData, setContainerData] = useState([
+    [1, 2, 1],
+    [0, 1, 2],
+    [2, 0, 1],
+  ]);
+
   const boxWidth = 125;
   const dividerWidth = 10;
   const iconWidth = 95;
   const boxPadding = 15;
+  const playerIcon = ["", circleMark.src, crossMark.src];
+  const deviceWidth = typeof window == "undefined" ? 0 : window.innerWidth;
+  const deviceHeight = typeof window == "undefined" ? 0 : window.innerHeight;
 
-  const containerIdData = [
-    ["top-left", "top-center", "top-right"],
-    ["mid-left", "mid-mid", "center-right"],
-    ["bottom-left", "bottom-center", "bottom-right"],
-  ];
-
-  return typeof window == "undefined" ? (
-    <></>
-  ) : (
-    <main>
-      <GameNavBar
-        activeUser={turn}
-        onTimeUp={() => {}}
-        users={[
-          {
-            title: "Demi Wilkinson",
-            description: "example@gmail.com",
-          },
-          {
-            title: "Demi Wilkinson",
-            description: "example@gmail.com",
-          },
-        ]}
-      />
-      <SafetyLayer>
+  return (
+    <SafetyLayer>
+      <main>
+        <GameNavBar
+          activeUser={turn}
+          onTimeUp={() => {}}
+          users={[
+            {
+              title: "Demi Wilkinson",
+              description: "example@gmail.com",
+            },
+            {
+              title: "Demi Wilkinson",
+              description: "example@gmail.com",
+            },
+          ]}
+        />
         <Stage
           className="!w-full !h-screen"
-          width={window.innerWidth}
-          height={window.innerHeight}
-          options={{ backgroundColor: "#141414" }}
+          width={deviceWidth}
+          height={deviceHeight}
+          options={{
+            hello: true,
+            backgroundColor: 0x141414,
+          }}
         >
           <Container
             position={[
-              window.innerWidth / 2 - boxWidth * 1.5,
-              window.innerHeight / 2 - boxWidth,
+              deviceWidth / 2 - boxWidth * 1.5,
+              deviceHeight / 2 - boxWidth,
             ]}
           >
             {[1, 2].map((e, key) => {
@@ -87,35 +89,37 @@ const TikTakTokGame = () => {
                 />
               );
             })}
-            {containerIdData.map((e, p_key) => {
-              return e.map((e, c_key) => {
+            {containerData.map((e, p_key) => {
+              return e.map((c_item, c_key) => {
                 return (
-                  <>
-                    <Container
-                      key={`${p_key}${c_key}`}
-                      width={boxWidth}
-                      height={boxWidth}
-                      position={[
-                        boxWidth * c_key + dividerWidth * c_key,
-                        boxWidth * p_key + dividerWidth * p_key,
-                      ]}
-                    >
+                  <Container
+                    key={`${p_key}${c_key}`}
+                    width={boxWidth}
+                    height={boxWidth}
+                    position={[
+                      boxWidth * c_key + dividerWidth * c_key,
+                      boxWidth * p_key + dividerWidth * p_key,
+                    ]}
+                  >
+                    {c_item ? (
                       <Sprite
                         x={boxPadding}
                         y={boxPadding}
                         width={iconWidth}
                         height={iconWidth}
-                        image={crossMark.src}
+                        image={playerIcon[c_item]}
                       />
-                    </Container>
-                  </>
+                    ) : (
+                      <></>
+                    )}
+                  </Container>
                 );
               });
             })}
           </Container>
         </Stage>
-      </SafetyLayer>
-    </main>
+      </main>
+    </SafetyLayer>
   );
 };
 
