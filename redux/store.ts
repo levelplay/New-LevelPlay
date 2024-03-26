@@ -3,11 +3,13 @@ import { configureStore } from '@reduxjs/toolkit';
 import modelReducer, { modelInitialState } from './model/controller';
 import toastReducer, { toastInitialState } from './toast/controller';
 import authReducer from './auth/controller';
+import socketReducer from "./socket/controller";
 
 const rootReducer = combineReducers({
     model: modelReducer,
     toast: toastReducer,
-    auth: authReducer
+    auth: authReducer,
+    game: socketReducer,
 });
 
 export type RootReducerType = ReturnType<typeof rootReducer>;

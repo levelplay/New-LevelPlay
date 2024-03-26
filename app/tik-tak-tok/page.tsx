@@ -2,6 +2,8 @@
 import GameNavBar from "@/components/layout/GameNavBar";
 import SafetyLayer from "@/components/layout/SafetyLayer";
 import { circleMark, crossMark, emptyMark } from "@/public/images";
+import { store } from "@/redux/store";
+import { showSuccessThunk } from "@/redux/toast/controller";
 import { Avatar, User } from "@nextui-org/react";
 import { DRAW_MODES } from "@pixi/core";
 import "@pixi/events";
@@ -17,12 +19,45 @@ const playerIcon = [emptyMark.src, circleMark.src, crossMark.src];
 const deviceWidth = typeof window == "undefined" ? 0 : window.innerWidth;
 const deviceHeight = typeof window == "undefined" ? 0 : window.innerHeight;
 
+const playerWin=(moves: number[][], player: number)=>{
+  if(moves[0][0] == player &&  moves[0][1] == player && moves[0][2] == player   ){
+    return true;
+  }
+  if(moves[1][0] == player &&  moves[1][1] == player && moves[1][2] == player   ){
+    return true;
+  }
+  if(moves[2][0] == player &&  moves[2][1] == player && moves[2][2] == player   ){
+    return true;
+  }
+  if(moves[0][0] == player &&  moves[1][0] == player && moves[2][0] == player   ){
+    return true;
+  }
+  if(moves[0][1] == player &&  moves[1][1] == player && moves[2][1] == player   ){
+    return true;
+  }
+  if(moves[0][2] == player &&  moves[1][2] == player && moves[2][2] == player   ){
+    return true;
+  }
+  if(moves[0][0] == player &&  moves[1][1] == player && moves[2][2] == player   ){
+    return true;
+  }
+  if(moves[0][2] == player &&  moves[1][1] == player && moves[2][0] == player   ){
+    return true;
+  }
+  return false;
+}
+
 const TikTakTokGame = () => {
-  const [turn, setTurn] = useState<number>(0);
+  const [turn, setTurn] = useState<number>(1);
+  const defultData= [
+    [0, 0, 0],
+    [0, 0, 0],
+    [0, 0, 0],
+  ];
   const [containerData, setContainerData] = useState([
-    [1, 0, 1],
-    [0, 0, 2],
-    [2, 0, 1],
+    [0, 0, 0],
+    [0, 0, 0],
+    [0, 0, 0],
   ]);
 
   return (
@@ -102,10 +137,20 @@ const TikTakTokGame = () => {
                         key={`${p_key}${c_key}`}
                         interactive={true}
                         onclick={() => {
-                          const userIcon = 1;
+                          const userIcon = turn;
                           const currentData = [...containerData];
                           currentData[p_key][c_key] = userIcon;
                           setContainerData(currentData);
+                          const win = playerWin(currentData, turn);
+                          if(win){
+                            store.dispatch(showSuccessThunk(`Player ${ turn } win.`));
+                            setContainerData([...defultData]);
+                          }
+                          if(turn==1){
+                            setTurn(2);
+                          }else{
+                            setTurn(1);
+                          }
                         }}
                         x={boxWidth * c_key + dividerWidth * c_key + boxPadding}
                         y={boxWidth * p_key + dividerWidth * p_key + boxPadding}

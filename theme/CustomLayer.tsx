@@ -5,7 +5,7 @@ import { store } from "@/redux/store";
 import { Provider } from "react-redux";
 import ModelsGroup from "@/components/models";
 import AppToast from "@/components/layout/Toast";
-import AppNavbar from "@/components/layout/AppNavbar";
+import { SocketComponent } from "@/components/core/SocketComponent";
 
 interface DataModel {
   children: React.ReactNode;
@@ -17,6 +17,7 @@ const CustomLayer: React.FC<DataModel> = ({ children }) => {
       <NextUIProvider>
         <ModelsGroup />
         <AppToast />
+        <SocketComponent/>
         {children}
       </NextUIProvider>
     </Provider>

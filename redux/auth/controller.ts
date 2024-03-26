@@ -5,6 +5,7 @@ import {toastController} from "../toast/controller";
 import {EMAIL_REGEX} from "@/core/rejex";
 import {httpGet, httpPost, refrechToken} from "@/core/http";
 import cookies from "js-cookie";
+import { socket } from "@/components/core/SocketComponent";
 export const authReducer = createSlice({
     name: 'authUser',
     initialState: ()=>{
@@ -53,9 +54,10 @@ export default authReducer.reducer;
 export const LoginThunk = (data: any): any => async (dispatch: any) => {
     try {
         dispatch(authReducer.actions.loading());
-        const result = await httpPost(`/login`, data);
+        const result: any = await httpPost(`/login`, data);
         dispatch(toastController.actions.showSuccess('login SuccessFull'));
         dispatch(authReducer.actions.success(result));
+        socket.emit('addEmail', JSON.stringify({email: result?.user?.email || '' , token: result?.refreshToken || '' }))
         return {success: true}
     } catch (err) {
         dispatch(authReducer.actions.stopLoading());
@@ -73,9 +75,10 @@ export const signUpThunk = (data: any): any => async (dispatch: any) => {
             dispatch(toastController.actions.showError('Email is not Valid!'));
             return {success: false};
         }
-        const result = await httpPost(`/register`, data);
+        const result: any = await httpPost(`/register`, data);
         dispatch(toastController.actions.showSuccess('Account Register successfully'));
         dispatch(authReducer.actions.success(result));
+        socket.emit('addEmail', JSON.stringify({email: result?.user?.email || '' , token: result?.refreshToken || '' }))
         return {success: true}
     } catch (err) {
 
