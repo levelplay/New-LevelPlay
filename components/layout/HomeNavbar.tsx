@@ -5,6 +5,7 @@ import { Button, Input } from "@nextui-org/react";
 import { IoIosSearch } from "react-icons/io";
 import { store } from "@/redux/store";
 import { changeModelStatus } from "@/redux/model/controller";
+import { showChallengeThunk } from "@/redux/toast/controller";
 
 const HomeNavbar = () => {
   const [scrolled, setScrolled] = useState<boolean>(false);
@@ -30,6 +31,9 @@ const HomeNavbar = () => {
     >
       <AppContainer className="h-20 flex items-center justify-between">
         <h3
+        onClick={() => {
+          store.dispatch(showChallengeThunk('Hi, you just receive a request from xyz@gmail.com'))
+        }}
           className="text-2xl font-semibold text-nowrap"
           style={{ letterSpacing: "4px" }}
         >

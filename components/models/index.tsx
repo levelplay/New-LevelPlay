@@ -4,6 +4,7 @@ import SignUpModel from "./SignUp";
 import ForgetPasswordModel from "./ForgetPassword";
 import LeaderBoardModel from "./LeaderBoard";
 import GameStartModel from "./GameStart";
+import GameEndModel from "./GameEnd";
 
 const ModelsGroup = () => {
   return (
@@ -13,6 +14,7 @@ const ModelsGroup = () => {
       <ForgetPasswordModel />
       <LeaderBoardModel />
       <GameStartModel />
+      <GameEndModel />
     </>
   );
 };

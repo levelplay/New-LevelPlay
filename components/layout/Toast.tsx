@@ -5,16 +5,19 @@ import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { MdClose } from "react-icons/md";
 import {
+  showChallengeThunk,
   showErrorThunk,
   showSuccessThunk,
   showWarningThunk,
 } from "@/redux/toast/controller";
+import { FaFantasyFlightGames } from "react-icons/fa6";
 
 const AppToast = () => {
   const state: any = useSelector<RootReducerType>((state) => state.toast);
   const [errorMessage, setErrorMessage] = useState(false);
   const [warningMessage, setWarningMessage] = useState(false);
   const [successMessage, setSuccessMessage] = useState(false);
+  const [challengeMessage, setChallengeMessage] = useState(false);
   const activeTime = 5000;
 
   useEffect(() => {
@@ -46,6 +49,16 @@ const AppToast = () => {
       }, activeTime);
     }
   }, [state.warning]);
+
+  useEffect(() => {
+    if (state.challenge != "") {
+      setChallengeMessage(true);
+      setTimeout(() => {
+        setChallengeMessage(false);
+        store.dispatch(showChallengeThunk(""));
+      }, 10000);
+    }
+  }, [state.challenge]);
 
   return (
     <>
@@ -138,6 +151,26 @@ const AppToast = () => {
           }}
         >
           <MdClose />
+        </Button>
+      </div>
+      <div
+        id="toast-challenge"
+        aria-checked={challengeMessage}
+        className="flex items-center max-w-full w-max px-2 py-2 gap-3 text-gray-500 bg-white rounded-lg  shadow-md fixed bottom-6 left-6 scale-0 opacity-0 aria-checked:scale-100 aria-checked:opacity-100 duration-100 z-[1000000]"
+      >
+        <div className="inline-flex items-center justify-center text-2xl flex-shrink-0 w-8 h-8 text-orange-500 bg-gray-100 rounded-lg">
+          <FaFantasyFlightGames />
+        </div>
+        <div className="text-sm font-normal text-zinc-900 flex-1">{state.challenge}</div>
+        <Button
+          color="secondary"
+          size="sm"
+          onClick={() => {
+            setWarningMessage(false);
+            store.dispatch(showWarningThunk(""));
+          }}
+        >
+          Join
         </Button>
       </div>
     </>

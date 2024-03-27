@@ -19,37 +19,37 @@ const playerIcon = [emptyMark.src, circleMark.src, crossMark.src];
 const deviceWidth = typeof window == "undefined" ? 0 : window.innerWidth;
 const deviceHeight = typeof window == "undefined" ? 0 : window.innerHeight;
 
-const playerWin=(moves: number[][], player: number)=>{
-  if(moves[0][0] == player &&  moves[0][1] == player && moves[0][2] == player   ){
+const playerWin = (moves: number[][], player: number) => {
+  if (moves[0][0] == player && moves[0][1] == player && moves[0][2] == player) {
     return true;
   }
-  if(moves[1][0] == player &&  moves[1][1] == player && moves[1][2] == player   ){
+  if (moves[1][0] == player && moves[1][1] == player && moves[1][2] == player) {
     return true;
   }
-  if(moves[2][0] == player &&  moves[2][1] == player && moves[2][2] == player   ){
+  if (moves[2][0] == player && moves[2][1] == player && moves[2][2] == player) {
     return true;
   }
-  if(moves[0][0] == player &&  moves[1][0] == player && moves[2][0] == player   ){
+  if (moves[0][0] == player && moves[1][0] == player && moves[2][0] == player) {
     return true;
   }
-  if(moves[0][1] == player &&  moves[1][1] == player && moves[2][1] == player   ){
+  if (moves[0][1] == player && moves[1][1] == player && moves[2][1] == player) {
     return true;
   }
-  if(moves[0][2] == player &&  moves[1][2] == player && moves[2][2] == player   ){
+  if (moves[0][2] == player && moves[1][2] == player && moves[2][2] == player) {
     return true;
   }
-  if(moves[0][0] == player &&  moves[1][1] == player && moves[2][2] == player   ){
+  if (moves[0][0] == player && moves[1][1] == player && moves[2][2] == player) {
     return true;
   }
-  if(moves[0][2] == player &&  moves[1][1] == player && moves[2][0] == player   ){
+  if (moves[0][2] == player && moves[1][1] == player && moves[2][0] == player) {
     return true;
   }
   return false;
-}
+};
 
 const TikTakTokGame = () => {
   const [turn, setTurn] = useState<number>(1);
-  const defultData= [
+  const defultData = [
     [0, 0, 0],
     [0, 0, 0],
     [0, 0, 0],
@@ -142,13 +142,15 @@ const TikTakTokGame = () => {
                           currentData[p_key][c_key] = userIcon;
                           setContainerData(currentData);
                           const win = playerWin(currentData, turn);
-                          if(win){
-                            store.dispatch(showSuccessThunk(`Player ${ turn } win.`));
+                          if (win) {
+                            store.dispatch(
+                              showSuccessThunk(`Player ${turn} win.`)
+                            );
                             setContainerData([...defultData]);
                           }
-                          if(turn==1){
+                          if (turn == 1) {
                             setTurn(2);
-                          }else{
+                          } else {
                             setTurn(1);
                           }
                         }}

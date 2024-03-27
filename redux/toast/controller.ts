@@ -4,7 +4,9 @@ import { ToastType } from "./type";
 const toastInitialState: ToastType = {
     error: '',
     success: '',
-    warning: ''
+    warning: '',
+    challenge: '',
+    data: null
 }
 
 const toastController = createSlice({
@@ -14,47 +16,40 @@ const toastController = createSlice({
         showError(state, payload) {
             state.error = payload.payload;
         },
-        removeError(state) {
-            state.error = '';
-        },
         showSuccess(state, payload) {
             state.success = payload.payload;
         },
-        removeSuccess(state) {
-            state.success = '';
+        showChallenge(state, payload) {
+            state.challenge = payload.payload;
         },
         showWarning(state, payload) {
             state.warning = payload.payload;
         },
-        removeWarning(state) {
-            state.warning = '';
-        }
+        changeData(state, payload) {
+            state.data = payload.payload;
+        },
     }
 });
 
 export default toastController.reducer;
 export { toastController, toastInitialState };
 
-export const showErrorThunk = (error: string): any => async (dispatch: any) => {
+export const showErrorThunk = (error: string, data?: any): any => async (dispatch: any) => {
+    dispatch(toastController.actions.changeData(data ?? null));
     dispatch(toastController.actions.showError(error));
 };
 
-export const removeErrorThunk = (error: string): any => async (dispatch: any) => {
-    dispatch(toastController.actions.removeError());
-};
-
-export const showSuccessThunk = (error: string): any => async (dispatch: any) => {
+export const showSuccessThunk = (error: string, data?: any): any => async (dispatch: any) => {
+    dispatch(toastController.actions.changeData(data ?? null));
     dispatch(toastController.actions.showSuccess(error));
 };
 
-export const removeSuccessThunk = (error: string): any => async (dispatch: any) => {
-    dispatch(toastController.actions.removeSuccess());
-};
-
-export const showWarningThunk = (error: string): any => async (dispatch: any) => {
+export const showWarningThunk = (error: string, data?: any): any => async (dispatch: any) => {
+    dispatch(toastController.actions.changeData(data ?? null));
     dispatch(toastController.actions.showWarning(error));
 };
 
-export const removeWarningThunk = (error: string): any => async (dispatch: any) => {
-    dispatch(toastController.actions.removeWarning());
+export const showChallengeThunk = (error: string, data?: any): any => async (dispatch: any) => {
+    dispatch(toastController.actions.changeData(data ?? null));
+    dispatch(toastController.actions.showChallenge(error));
 };

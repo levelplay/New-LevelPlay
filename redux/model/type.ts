@@ -10,4 +10,5 @@ export type modelStatusType =
     'signUp' |
     'forget-password' |
     'leader-board' |
-    'game-start';
+    'game-start' |
+    'game-end';
