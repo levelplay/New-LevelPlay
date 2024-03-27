@@ -11,6 +11,7 @@ import {
   showWarningThunk,
 } from "@/redux/toast/controller";
 import { FaFantasyFlightGames } from "react-icons/fa6";
+import { socket } from "../core/SocketComponent";
 
 const AppToast = () => {
   const state: any = useSelector<RootReducerType>((state) => state.toast);
@@ -166,8 +167,9 @@ const AppToast = () => {
           color="secondary"
           size="sm"
           onClick={() => {
-            setWarningMessage(false);
-            store.dispatch(showWarningThunk(""));
+            setChallengeMessage(false);
+            store.dispatch(showChallengeThunk(""));
+            socket.emit('challenge', JSON.stringify({user: state.challenge, accept: true}))
           }}
         >
           Join

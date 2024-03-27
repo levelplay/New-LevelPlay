@@ -1,6 +1,9 @@
 "use client"
+import { closeModel } from "@/redux/model/controller";
 import { updateLoading } from "@/redux/socket/controller";
 import { store } from "@/redux/store";
+import { showChallengeThunk } from "@/redux/toast/controller";
+import { useRouter } from "next/navigation";
 import React, { useEffect } from "react";
 import {io} from 'socket.io-client';
 export const socket = io(process.env.NEXT_PUBLIC_API_URL || '', {
@@ -15,12 +18,16 @@ export const SocketComponent = (
     HTMLDivElement
   >
 ) => {
+  const { push } = useRouter();
+
   useEffect(()=>{
 socket.once('connect', ()=>{
   console.log('connected');
 })
-socket.on('gameChallenge', (e)=>{
+socket.on('gameChallenge', (e: any)=>{
   console.log('gameChallenge', e);
+  store.dispatch(showChallengeThunk(e));
+
 })
 socket.on('error', (e)=>{
   store.dispatch(updateLoading(false));
@@ -28,7 +35,8 @@ socket.on('error', (e)=>{
 });
 socket.on('start-tiktakTok', (e)=>{
   store.dispatch(updateLoading(false));
-  console.log('start-tiktakTok', e);
+  store.dispatch(closeModel());
+  push(`/tik-tak-tok?player=${e}`);
 })
   },[])
   

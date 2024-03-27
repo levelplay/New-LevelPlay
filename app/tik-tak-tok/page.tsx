@@ -1,13 +1,13 @@
 "use client";
+import { socket } from "@/components/core/SocketComponent";
 import GameNavBar from "@/components/layout/GameNavBar";
 import SafetyLayer from "@/components/layout/SafetyLayer";
 import { circleMark, crossMark, emptyMark } from "@/public/images";
+import { changeModelStatus } from "@/redux/model/controller";
 import { store } from "@/redux/store";
-import { showSuccessThunk } from "@/redux/toast/controller";
-import { Avatar, User } from "@nextui-org/react";
-import { DRAW_MODES } from "@pixi/core";
 import "@pixi/events";
 import { Container, Graphics, Sprite, Stage } from "@pixi/react";
+import { useSearchParams } from "next/navigation";
 import React, { FC, useEffect, useMemo, useState } from "react";
 
 // config
@@ -49,6 +49,27 @@ const playerWin = (moves: number[][], player: number) => {
 
 const TikTakTokGame = () => {
   const [turn, setTurn] = useState<number>(1);
+  const [currentTurn, setCurrentTurn] = useState<number>(1);
+  const searchParams = useSearchParams();
+  const player = searchParams.get('player')
+  useEffect(()=>{
+    if(player == 'player2'){
+      setTurn(2);
+    }
+    socket.on('gameRes', (e)=>{
+      const data = JSON.parse(e);
+      setContainerData(data.data);
+      setCurrentTurn(data.turn);
+    });
+    socket.on('gameWin', (e)=>{
+      console.log('gameWin');
+      store.dispatch(changeModelStatus('game-end', {status: 'win', player: turn })) 
+    });
+    socket.on('gameLose', (e)=>{
+      console.log('gameLose');
+      store.dispatch(changeModelStatus('game-end', {status: 'lose', player: turn }))
+    });
+  })
   const defultData = [
     [0, 0, 0],
     [0, 0, 0],
@@ -137,16 +158,28 @@ const TikTakTokGame = () => {
                         key={`${p_key}${c_key}`}
                         interactive={true}
                         onclick={() => {
-                          const userIcon = turn;
                           const currentData = [...containerData];
+                          const userIcon = turn;
+                          if(player){
+                            if(currentTurn == turn){
+                              currentData[p_key][c_key] = userIcon;
+                              socket.emit('turn', JSON.stringify({turn, data:currentData }))
+                              setContainerData(currentData);
+                              if(currentTurn ==1){
+                                setCurrentTurn(2)
+                              }else{
+                                setCurrentTurn(1)
+                              }
+                            }
+                            return;
+                          }
                           currentData[p_key][c_key] = userIcon;
                           setContainerData(currentData);
                           const win = playerWin(currentData, turn);
                           if (win) {
                             store.dispatch(
-                              showSuccessThunk(`Player ${turn} win.`)
+                              changeModelStatus('game-end', {status: 'win', player: turn })
                             );
-                            setContainerData([...defultData]);
                           }
                           if (turn == 1) {
                             setTurn(2);
