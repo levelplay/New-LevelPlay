@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { closeModel } from "@/redux/model/controller";
 import { RootReducerType, store } from "@/redux/store";
 import {
@@ -10,10 +10,11 @@ import {
   User,
 } from "@nextui-org/react";
 import { useSelector } from "react-redux";
-
+import useSWR from 'swr'
+import { fetcher } from "@/core/http";
 const LeaderBoardModel = () => {
   const state = useSelector((e: RootReducerType) => e?.model?.status);
-
+  const { data, error, isLoading } = useSWR('/me/leaderboard', fetcher)
   return (
     <Modal
       isOpen={state == "leader-board"}
@@ -51,10 +52,10 @@ const LeaderBoardModel = () => {
         </ModalHeader>
         <ModalBody className="pb-6 pt-0">
           <div className="flex flex-col gap-4">
-            {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((e) => {
+            { (isLoading? [] : data?.data?.users || []).map((e: any) => {
               return (
-                <div className="flex justify-between items-center" key={e}>
-                  <User name="Demi Wilkinson" description="230 Wins" />
+                <div className="flex justify-between items-center" key={e.username}>
+                  <User name="Demi Wilkinson" description={`${e.win} Wins`} />
                   <p className="text-sm text-foreground-400">1st</p>
                 </div>
               );

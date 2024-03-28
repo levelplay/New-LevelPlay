@@ -2,6 +2,9 @@ import axios from 'axios';
 import cookies from "js-cookie";
 
 const ax = axios.create({baseURL: `${process.env.NEXT_PUBLIC_API_URL}api`});
+// @ts-ignore: Unreachable code error
+export const fetcher = (...args: any) => ax(...args).then(res => res.data)
+
 export const httpGet = (url: string)=>{
     return new Promise(async (resolve, reject)=>{
         ax.get(url, {headers: {...authHeader()} }).then(e=>{
