@@ -84,8 +84,27 @@ const TikTakTokGame = () => {
   return (
     <main>
       <GameNavBar
-        activeUser={turn}
-        onTimeUp={() => {}}
+        activeUser={player? currentTurn: turn}
+        onTimeUp={() => {
+          if(player){
+            if(currentTurn == turn){
+              socket.emit('turn', JSON.stringify({turn, data:containerData }))
+              if(currentTurn ==1){
+                setCurrentTurn(2)
+              }else{
+                setCurrentTurn(1)
+              }
+            }
+          }else{
+            if (turn == 1) {
+              setTurn(2);
+            } else {
+              setTurn(1);
+            }
+          }
+         
+        }}
+        
         users={[
           {
             title: "Demi Wilkinson",

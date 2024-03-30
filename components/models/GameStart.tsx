@@ -54,7 +54,7 @@ const GameStartModel = () => {
             placeholder="Enter Username"
             variant="flat"
             onChange={(e) => {
-              setTempUser(e.target.value);
+              setuser(e.target.value);
             }}
             endContent={
               <Button
@@ -62,7 +62,7 @@ const GameStartModel = () => {
                 size="sm"
                 isLoading={loading}
                 onClick={() => {
-                  if (tempUsers != "") {
+                  if (users != "") {
                     store.dispatch(updateLoading(true));
                     socket.emit("pair", JSON.stringify({ user: users }));
                   } else {

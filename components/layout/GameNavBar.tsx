@@ -19,13 +19,14 @@ const GameNavBar: FC<DataModel> = ({ users, activeUser, onTimeUp }) => {
   Chart.register(ArcElement);
 
   useEffect(() => {
-    setTimeout(() => {
+    const timeout = setTimeout(() => {
       if (time == 0) {
         onTimeUp();
       } else {
         setTime(time - 1);
       }
     }, 1000);
+    return ()=> clearInterval(timeout);
   }, [time]);
 
   useEffect(() => {
