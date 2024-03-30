@@ -16,9 +16,11 @@ import { useSelector } from "react-redux";
 import { closeModel } from "@/redux/model/controller";
 import FormTextField from "../input/FormTextField";
 import FormPasswordField from "../input/FormPasswordField";
+import { SendTokenThunk, forgetPasswordThunk } from "@/redux/auth/controller";
 
 const ForgetPasswordModel = () => {
   const state = useSelector((e: RootReducerType) => e?.model?.status);
+  const loading = useSelector((e: RootReducerType) => e?.auth?.loading);
   const formSchema = yup.object().shape({
     email: yup
       .string()
@@ -33,10 +35,15 @@ const ForgetPasswordModel = () => {
     resolver: yupResolver(formSchema),
   });
 
-  const { handleSubmit, reset } = formMethods;
+  const { handleSubmit, reset, getValues } = formMethods;
 
   const submitForm = handleSubmit(
-    (data) => {},
+    async (data) => {
+      const result = await store.dispatch(forgetPasswordThunk(data));
+      if (result.success) {
+        store.dispatch(closeModel());
+      }
+    },
     () => {
       store.dispatch(showErrorThunk("Please resolve errors"));
     }
@@ -72,7 +79,16 @@ const ForgetPasswordModel = () => {
                   type: "number",
                   placeholder: "Enter verification code",
                   endContent: (
-                    <Button color="primary" className="h-full w-36">
+                    <Button 
+                    isLoading={loading}
+                    onClick={()=>{
+                      store.dispatch(
+                        SendTokenThunk({
+                          email: getValues("email") || "",
+                          type: 2,
+                        })
+                      );
+                    }} color="primary" className="h-full w-36">
                       Send Code
                     </Button>
                   ),
@@ -87,7 +103,7 @@ const ForgetPasswordModel = () => {
               />
             </ModalBody>
             <ModalFooter>
-              <Button color="primary" type="submit" className="my-2" fullWidth>
+              <Button isLoading={loading} color="primary" type="submit" className="my-2" fullWidth>
                 Continue
               </Button>
             </ModalFooter>
