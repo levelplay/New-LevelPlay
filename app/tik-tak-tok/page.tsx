@@ -226,7 +226,6 @@ const TikTakTokGame = () => {
                                 );
                                 setContainerData(currentData);
                                 const draw = isdraw(currentData);
-                                console.log("dddd", draw);
                                 if (draw) {
                                   store.dispatch(
                                     changeModelStatus("game-end", {
@@ -240,23 +239,6 @@ const TikTakTokGame = () => {
                                 } else {
                                   setCurrentTurn(1);
                                 }
-                                return;
-                              }
-                              currentData[p_key][c_key] = userIcon;
-                              setContainerData(currentData);
-                              const win = playerWin(currentData, turn);
-                              if (win) {
-                                store.dispatch(
-                                  changeModelStatus("game-end", {
-                                    status: "win",
-                                    player: turn,
-                                  })
-                                );
-                              }
-                              if (turn == 1) {
-                                setTurn(2);
-                              } else {
-                                setTurn(1);
                               }
                               return;
                             }
@@ -264,7 +246,6 @@ const TikTakTokGame = () => {
                             setContainerData(currentData);
                             const win = playerWin(currentData, turn);
                             const draw = isdraw(currentData);
-                            console.log("dddd", draw);
                             if (draw) {
                               store.dispatch(
                                 changeModelStatus("game-end", {
