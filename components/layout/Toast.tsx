@@ -139,6 +139,14 @@ const AppToast = () => {
             size="sm"
             className="text-lg"
             isIconOnly
+            onClick={() => {
+              setChallengeMessage(false);
+              store.dispatch(showChallengeThunk(""));
+              socket.emit(
+                "reject",
+                JSON.stringify({ user: state.challenge, accept: true })
+              );
+            }}
           >
             <MdClose />
           </Button>
