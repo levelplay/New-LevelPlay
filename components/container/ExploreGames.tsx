@@ -8,11 +8,13 @@ import GameCard from "../card/GameCard";
 
 const ExploreGames = () => {
   return (
-    <AppContainer className="py-16">
-      <div className="flex flex-col gap-3 items-center">
-        <h4 className="text-4xl uppercase font-semibold ">Browse Games</h4>
+    <AppContainer className="py-12">
+      <div className="flex flex-col gap-3">
+        <h4 className="text-3xl uppercase font-semibold ">Browse Games</h4>
       </div>
-      <div className="flex justify-center pt-12">
+      <div className="flex justify-center pt-8 gap-6">
+        <GameCard />
+        <GameCard />
         <GameCard />
       </div>
     </AppContainer>

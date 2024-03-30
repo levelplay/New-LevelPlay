@@ -10,7 +10,7 @@ import NextImage from "../other/NextImage";
 
 const GameCard = () => {
   return (
-    <div className="cursor-pointer max-w-md">
+    <div className="cursor-pointer">
       <figure className="aspect-[5/3] rounded-2xl relative">
         <Button
           variant="flat"
