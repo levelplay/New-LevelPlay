@@ -37,7 +37,7 @@ socket.on('error', (e)=>{
 socket.on('start-tiktakTok', (e)=>{
   store.dispatch(updateLoading(false));
   store.dispatch(closeModel());
-  push(`/tik-tak-tok?player=${e}`);
+  push(`/tik-tak-tok?${e}`);
 })
   },[])
   

@@ -4,11 +4,12 @@ import GameNavBar from "@/components/layout/GameNavBar";
 import SafetyLayer from "@/components/layout/SafetyLayer";
 import { circleMark, crossMark, emptyMark } from "@/public/images";
 import { changeModelStatus } from "@/redux/model/controller";
-import { store } from "@/redux/store";
+import { RootReducerType, store } from "@/redux/store";
 import "@pixi/events";
 import { Container, Graphics, Sprite, Stage } from "@pixi/react";
 import { useSearchParams } from "next/navigation";
 import React, { FC, useEffect, useMemo, useState } from "react";
+import { useSelector } from "react-redux";
 
 // config
 const boxWidth = 125;
@@ -52,6 +53,8 @@ const TikTakTokGame = () => {
   const [currentTurn, setCurrentTurn] = useState<number>(1);
   const searchParams = useSearchParams();
   const player = searchParams.get('player')
+  const user = useSelector((e:RootReducerType)=> e.auth.user);
+  const email = searchParams.get('email')
   useEffect(()=>{
     if(player == 'player2'){
       setTurn(2);
@@ -107,12 +110,12 @@ const TikTakTokGame = () => {
         
         users={[
           {
-            title: "Demi Wilkinson",
-            description: "example@gmail.com",
+            title: 'Player 1',
+            description: (player ? player == 'player1'?  user?.email: email: '') as string,
           },
           {
-            title: "Demi Wilkinson",
-            description: "example@gmail.com",
+            title: 'Player 2',
+            description: (player ? player == 'player2'?  user?.email: email: '') as string,
           },
         ]}
       />
