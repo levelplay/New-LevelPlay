@@ -4,7 +4,6 @@ import NextImage from "next/image";
 import { homeBanner } from "@/public/images";
 import { AppContainer } from "../layout/AppContainer";
 import { Button } from "@nextui-org/react";
-import { MdKeyboardDoubleArrowDown } from "react-icons/md";
 import { store } from "@/redux/store";
 import { changeModelStatus } from "@/redux/model/controller";
 
@@ -36,10 +35,10 @@ const HeroSection = () => {
               color="primary"
               size="lg"
               onClick={() => {
-                store.dispatch(changeModelStatus("signUp"));
+                store.dispatch(changeModelStatus("game-start"));
               }}
             >
-              Join Now
+              Play Now
             </Button>
             <Button
               radius="full"
@@ -47,18 +46,10 @@ const HeroSection = () => {
               variant="bordered"
               size="lg"
               onClick={() => {
-                window.scrollTo({
-                  top: window.innerHeight - 80,
-                  behavior: "smooth",
-                });
+                store.dispatch(changeModelStatus("leader-board"));
               }}
-              endContent={
-                <div className=" translate-y-[3px]">
-                  <MdKeyboardDoubleArrowDown className="animate-bounce text-xl" />
-                </div>
-              }
             >
-              Explore
+              Leaderboard
             </Button>
           </div>
         </AppContainer>

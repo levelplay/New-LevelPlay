@@ -16,6 +16,19 @@ import { fetcher } from "@/core/http";
 const LeaderBoardModel = () => {
   const state = useSelector((e: RootReducerType) => e?.model?.status);
   const { data, error, isLoading } = useSWR("/me/leaderboard", fetcher);
+  const positions = [
+    "1st",
+    "2nd",
+    "3rd",
+    "4th",
+    "5th",
+    "6th",
+    "7th",
+    "8th",
+    "9th",
+    "10th",
+  ];
+
   return (
     <Modal
       isOpen={state == "leader-board"}
@@ -57,17 +70,21 @@ const LeaderBoardModel = () => {
         </ModalHeader>
         <ModalBody className="pb-6 pt-0">
           <div className="flex flex-col gap-4">
-            {(isLoading ? [] : data?.data?.users || []).map((e: any) => {
-              return (
-                <div
-                  className="flex justify-between items-center"
-                  key={e.username}
-                >
-                  <User name={e.username} description={`${e.win} Wins`} />
-                  <p className="text-sm text-foreground-400">1st</p>
-                </div>
-              );
-            })}
+            {(isLoading ? [] : data?.data?.users || []).map(
+              (e: any, key: any) => {
+                return (
+                  <div
+                    className="flex justify-between items-center"
+                    key={e.username}
+                  >
+                    <User name={e.username} description={`${e.win} Wins`} />
+                    <p className="text-sm text-foreground-400">
+                      {positions[key]}
+                    </p>
+                  </div>
+                );
+              }
+            )}
           </div>
         </ModalBody>
       </ModalContent>

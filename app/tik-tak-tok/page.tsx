@@ -52,27 +52,31 @@ const TikTakTokGame = () => {
   const [turn, setTurn] = useState<number>(1);
   const [currentTurn, setCurrentTurn] = useState<number>(1);
   const searchParams = useSearchParams();
-  const player = searchParams.get('player')
-  const user = useSelector((e:RootReducerType)=> e.auth.user);
-  const email = searchParams.get('email')
-  useEffect(()=>{
-    if(player == 'player2'){
+  const player = searchParams.get("player");
+  const user = useSelector((e: RootReducerType) => e.auth.user);
+  const email = searchParams.get("email");
+  useEffect(() => {
+    if (player == "player2") {
       setTurn(2);
     }
-    socket.on('gameRes', (e)=>{
+    socket.on("gameRes", (e) => {
       const data = JSON.parse(e);
       setContainerData(data.data);
       setCurrentTurn(data.turn);
     });
-    socket.on('gameWin', (e)=>{
-      console.log('gameWin');
-      store.dispatch(changeModelStatus('game-end', {status: 'win', player: turn })) 
+    socket.on("gameWin", (e) => {
+      console.log("gameWin");
+      store.dispatch(
+        changeModelStatus("game-end", { status: "win", player: turn })
+      );
     });
-    socket.on('gameLose', (e)=>{
-      console.log('gameLose');
-      store.dispatch(changeModelStatus('game-end', {status: 'lose', player: turn }))
+    socket.on("gameLose", (e) => {
+      console.log("gameLose");
+      store.dispatch(
+        changeModelStatus("game-end", { status: "lose", player: turn })
+      );
     });
-  })
+  });
   const defultData = [
     [0, 0, 0],
     [0, 0, 0],
@@ -87,35 +91,44 @@ const TikTakTokGame = () => {
   return (
     <main>
       <GameNavBar
-        activeUser={player? currentTurn: turn}
+        activeUser={player ? currentTurn : turn}
         onTimeUp={() => {
-          if(player){
-            if(currentTurn == turn){
-              socket.emit('turn', JSON.stringify({turn, data:containerData }))
-              if(currentTurn ==1){
-                setCurrentTurn(2)
-              }else{
-                setCurrentTurn(1)
+          if (player) {
+            if (currentTurn == turn) {
+              socket.emit(
+                "turn",
+                JSON.stringify({ turn, data: containerData })
+              );
+              if (currentTurn == 1) {
+                setCurrentTurn(2);
+              } else {
+                setCurrentTurn(1);
               }
             }
-          }else{
+          } else {
             if (turn == 1) {
               setTurn(2);
             } else {
               setTurn(1);
             }
           }
-         
         }}
-        
         users={[
           {
-            title: 'Player 1',
-            description: (player ? player == 'player1'?  user?.email: email: '') as string,
+            title: "Player 1",
+            description: (player
+              ? player == "player1"
+                ? user?.email
+                : email
+              : "") as string,
           },
           {
-            title: 'Player 2',
-            description: (player ? player == 'player2'?  user?.email: email: '') as string,
+            title: "Player 2",
+            description: (player
+              ? player == "player2"
+                ? user?.email
+                : email
+              : "") as string,
           },
         ]}
       />
@@ -141,7 +154,7 @@ const TikTakTokGame = () => {
                   key={key}
                   draw={(g) => {
                     g.clear();
-                    g.beginFill(0xfcc829, 1);
+                    g.beginFill(0xffffff, 1);
                     g.drawRoundedRect(
                       0,
                       boxWidth * e + dividerWidth * key,
@@ -159,7 +172,7 @@ const TikTakTokGame = () => {
                   key={key}
                   draw={(g) => {
                     g.clear();
-                    g.beginFill(0xfcc829, 1);
+                    g.beginFill(0xffffff, 1);
                     g.drawRoundedRect(
                       boxWidth * e + dividerWidth * key,
                       0,
@@ -180,33 +193,41 @@ const TikTakTokGame = () => {
                         key={`${p_key}${c_key}`}
                         interactive={true}
                         onclick={() => {
-                          const currentData = [...containerData];
-                          const userIcon = turn;
-                          if(player){
-                            if(currentTurn == turn){
-                              currentData[p_key][c_key] = userIcon;
-                              socket.emit('turn', JSON.stringify({turn, data:currentData }))
-                              setContainerData(currentData);
-                              if(currentTurn ==1){
-                                setCurrentTurn(2)
-                              }else{
-                                setCurrentTurn(1)
+                          if (c_item == 0) {
+                            const currentData = [...containerData];
+                            const userIcon = turn;
+                            if (player) {
+                              if (currentTurn == turn) {
+                                currentData[p_key][c_key] = userIcon;
+                                socket.emit(
+                                  "turn",
+                                  JSON.stringify({ turn, data: currentData })
+                                );
+                                setContainerData(currentData);
+                                if (currentTurn == 1) {
+                                  setCurrentTurn(2);
+                                } else {
+                                  setCurrentTurn(1);
+                                }
                               }
+                              return;
                             }
-                            return;
-                          }
-                          currentData[p_key][c_key] = userIcon;
-                          setContainerData(currentData);
-                          const win = playerWin(currentData, turn);
-                          if (win) {
-                            store.dispatch(
-                              changeModelStatus('game-end', {status: 'win', player: turn })
-                            );
-                          }
-                          if (turn == 1) {
-                            setTurn(2);
-                          } else {
-                            setTurn(1);
+                            currentData[p_key][c_key] = userIcon;
+                            setContainerData(currentData);
+                            const win = playerWin(currentData, turn);
+                            if (win) {
+                              store.dispatch(
+                                changeModelStatus("game-end", {
+                                  status: "win",
+                                  player: turn,
+                                })
+                              );
+                            }
+                            if (turn == 1) {
+                              setTurn(2);
+                            } else {
+                              setTurn(1);
+                            }
                           }
                         }}
                         x={boxWidth * c_key + dividerWidth * c_key + boxPadding}

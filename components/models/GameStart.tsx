@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { closeModel } from "@/redux/model/controller";
+import { changeModelStatus, closeModel } from "@/redux/model/controller";
 import { RootReducerType, store } from "@/redux/store";
 import {
   Button,
@@ -46,7 +46,11 @@ const GameStartModel = () => {
               className="flex justify-between items-center"
               key={user?.username || ""}
             >
-              <User name={user?.username || ""} description={user?.email} />
+              {user ? (
+                <User name={user?.username || ""} description={user?.email} />
+              ) : (
+                <User name={"Guest"} />
+              )}
             </div>
           </div>
           <Input
@@ -62,11 +66,18 @@ const GameStartModel = () => {
                 size="sm"
                 isLoading={loading}
                 onClick={() => {
-                  if (users != "") {
-                    store.dispatch(updateLoading(true));
-                    socket.emit("pair", JSON.stringify({ user: users }));
+                  if (user) {
+                    if (users != "") {
+                      store.dispatch(updateLoading(true));
+                      socket.emit("pair", JSON.stringify({ user: users }));
+                    } else {
+                      store.dispatch(showErrorThunk("Please enter username"));
+                    }
                   } else {
-                    store.dispatch(showErrorThunk("Please enter username"));
+                    store.dispatch(changeModelStatus("signIn"));
+                    store.dispatch(
+                      showErrorThunk("Please login to play multiple")
+                    );
                   }
                 }}
               >
@@ -93,8 +104,13 @@ const GameStartModel = () => {
           <Button
             isLoading={loading}
             onClick={(e) => {
-              store.dispatch(updateLoading(true));
-              socket.emit("pair", JSON.stringify({ user: "" }));
+              if (user) {
+                store.dispatch(updateLoading(true));
+                socket.emit("pair", JSON.stringify({ user: "" }));
+              } else {
+                store.dispatch(changeModelStatus("signIn"));
+                store.dispatch(showErrorThunk("Please login to play multiple"));
+              }
             }}
             color="primary"
             className="flex-1"

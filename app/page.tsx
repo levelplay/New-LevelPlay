@@ -9,7 +9,7 @@ const HomePage = () => {
     <>
       <HomeNavbar />
       <HeroSection />
-      <ExploreGames />
+      {/* <ExploreGames /> */}
       <AppFooter />
     </>
   );
