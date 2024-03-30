@@ -48,6 +48,22 @@ const playerWin = (moves: number[][], player: number) => {
   return false;
 };
 
+const isdraw = (moves: number[][]) => {
+  let draw = moves[0].includes(0);
+  if(draw){
+    return false;
+  }
+  draw = moves[1].includes(0);
+  if(draw){
+    return false;
+  }
+    draw = moves[2].includes(0);
+  if(draw){
+    return false;
+  }
+  return true;
+};
+
 const TikTakTokGame = () => {
   const [turn, setTurn] = useState<number>(1);
   const [currentTurn, setCurrentTurn] = useState<number>(1);
@@ -62,10 +78,13 @@ const TikTakTokGame = () => {
     socket.on('gameRes', (e)=>{
       const data = JSON.parse(e);
       setContainerData(data.data);
+      const draw = isdraw(data.data);
+      if(draw){
+        store.dispatch(changeModelStatus('game-end', {status: 'draw', player: turn })) 
+      }
       setCurrentTurn(data.turn);
     });
     socket.on('gameWin', (e)=>{
-      console.log('gameWin');
       store.dispatch(changeModelStatus('game-end', {status: 'win', player: turn })) 
     });
     socket.on('gameLose', (e)=>{
@@ -187,6 +206,11 @@ const TikTakTokGame = () => {
                               currentData[p_key][c_key] = userIcon;
                               socket.emit('turn', JSON.stringify({turn, data:currentData }))
                               setContainerData(currentData);
+                              const draw = isdraw(currentData);
+                              console.log('dddd', draw);
+                              if(draw){
+                                store.dispatch(changeModelStatus('game-end', {status: 'draw', player: turn })) 
+                              }
                               if(currentTurn ==1){
                                 setCurrentTurn(2)
                               }else{
@@ -198,6 +222,12 @@ const TikTakTokGame = () => {
                           currentData[p_key][c_key] = userIcon;
                           setContainerData(currentData);
                           const win = playerWin(currentData, turn);
+                          const draw = isdraw(currentData);
+                          console.log('dddd', draw);
+                          if(draw){
+                            store.dispatch(changeModelStatus('game-end', {status: 'draw', player: turn })) 
+
+                          }
                           if (win) {
                             store.dispatch(
                               changeModelStatus('game-end', {status: 'win', player: turn })
