@@ -10,11 +10,12 @@ import {
   User,
 } from "@nextui-org/react";
 import { useSelector } from "react-redux";
-import useSWR from 'swr'
+import useSWR from "swr";
 import { fetcher } from "@/core/http";
+
 const LeaderBoardModel = () => {
   const state = useSelector((e: RootReducerType) => e?.model?.status);
-  const { data, error, isLoading } = useSWR('/me/leaderboard', fetcher)
+  const { data, error, isLoading } = useSWR("/me/leaderboard", fetcher);
   return (
     <Modal
       isOpen={state == "leader-board"}
@@ -25,21 +26,25 @@ const LeaderBoardModel = () => {
     >
       <ModalContent>
         <ModalHeader className="flex-col pt-6">
-          <div className="flex items-end justify-center">
-            <Avatar
-              className="w-12 h-12 translate-x-[16px]"
-              name="Demi Wilkinson"
-            />
-            <Avatar
-              className="w-14 h-14 z-10"
-              name="Demi Wilkinson"
-              isBordered
-            />
-            <Avatar
-              className="w-12 h-12 translate-x-[-16px]"
-              name="Demi Wilkinson"
-            />
-          </div>
+          {data?.data?.users ? (
+            <div className="flex items-end justify-center">
+              <Avatar
+                className="w-12 h-12 translate-x-[16px]"
+                name={data?.data?.users[1].username}
+              />
+              <Avatar
+                className="w-14 h-14 z-10"
+                name={data?.data?.users[0].username}
+                isBordered
+              />
+              <Avatar
+                className="w-12 h-12 translate-x-[-16px]"
+                name={data?.data?.users[2].username}
+              />
+            </div>
+          ) : (
+            <></>
+          )}
           <div className="flex flex-col gap-1 py-4">
             <h5 className="text-lg font-semibold text-center">
               Watch LeaderBoard
@@ -52,10 +57,13 @@ const LeaderBoardModel = () => {
         </ModalHeader>
         <ModalBody className="pb-6 pt-0">
           <div className="flex flex-col gap-4">
-            { (isLoading? [] : data?.data?.users || []).map((e: any) => {
+            {(isLoading ? [] : data?.data?.users || []).map((e: any) => {
               return (
-                <div className="flex justify-between items-center" key={e.username}>
-                  <User name="Demi Wilkinson" description={`${e.win} Wins`} />
+                <div
+                  className="flex justify-between items-center"
+                  key={e.username}
+                >
+                  <User name={e.username} description={`${e.win} Wins`} />
                   <p className="text-sm text-foreground-400">1st</p>
                 </div>
               );

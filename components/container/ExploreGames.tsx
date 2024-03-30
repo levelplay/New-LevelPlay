@@ -9,14 +9,11 @@ import GameCard from "../card/GameCard";
 const ExploreGames = () => {
   return (
     <AppContainer className="py-16">
-      <div className="flex flex-col gap-2">
-        <h4 className="text-2xl/6">Browse Games</h4>
-        <span className="h-1 w-24 bg-white" />
+      <div className="flex flex-col gap-3 items-center">
+        <h4 className="text-4xl uppercase font-semibold ">Browse Games</h4>
       </div>
-      <div className="grid grid-cols-3 gap-8 pt-8">
-        {[1, 2, 3].map((e) => {
-          return <GameCard key={e} />;
-        })}
+      <div className="flex justify-center pt-12">
+        <GameCard />
       </div>
     </AppContainer>
   );

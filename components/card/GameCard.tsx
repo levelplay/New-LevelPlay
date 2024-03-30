@@ -6,11 +6,12 @@ import { MdOutlineLeaderboard } from "react-icons/md";
 import { homeBanner } from "@/public/images";
 import { store } from "@/redux/store";
 import { changeModelStatus } from "@/redux/model/controller";
+import NextImage from "../other/NextImage";
 
 const GameCard = () => {
   return (
-    <div className="cursor-pointer">
-      <figure className=" aspect-[5/3] rounded-2xl overflow-hidden relative">
+    <div className="cursor-pointer max-w-md">
+      <figure className="aspect-[5/3] rounded-2xl relative">
         <Button
           variant="flat"
           className="absolute top-1 right-1 text-xl z-10"
@@ -22,15 +23,15 @@ const GameCard = () => {
         >
           <MdOutlineLeaderboard />
         </Button>
-        <Image
-          src={homeBanner}
+        <NextImage
+          src={homeBanner.src}
           alt="game-image"
-          width={400}
-          height={300}
-          className="w-full h-full object-cover hover:scale-110 hover:rotate-2 duration-400"
+          className="w-full h-full object-cover"
+          isZoomed
+          isBlurred
         />
       </figure>
-      <div className="mt-2.5 flex justify-between px-4 gap-4">
+      <div className="flex justify-between px-4 gap-4">
         <h6 className="text-lg">Legends of the legends</h6>
         <Button
           radius="full"
