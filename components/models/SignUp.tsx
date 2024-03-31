@@ -26,7 +26,7 @@ const SignUpModel = () => {
       .string()
       .email("Invalid email address")
       .required("This field is required"),
-    nameName: yup.string().required("This field is required"),
+    username: yup.string().required("This field is required"),
     password: yup.string().required("This field is required"),
     code: yup.string().length(6, "Code must be 6 digit"),
   });
@@ -46,6 +46,7 @@ const SignUpModel = () => {
             email: data.email,
             password: data.password,
             code: data.code,
+            username: data.username,
           })
         )
         .then((e: any) => {
@@ -74,7 +75,7 @@ const SignUpModel = () => {
             <ModalBody>
               <h6 className="text-xl pt-5 pb-3 font-medium">Sign Up</h6>
               <FormTextField
-                name="nameName"
+                name="username"
                 inputProps={{
                   label: "User Name",
                   placeholder: "Enter your user name",

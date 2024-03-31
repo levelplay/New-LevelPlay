@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { closeModel } from "@/redux/model/controller";
 import { RootReducerType, store } from "@/redux/store";
 import {
@@ -12,12 +12,17 @@ import { useSelector } from "react-redux";
 import { useAppTheme } from "@/theme/apptheme";
 import Image from "next/image";
 import { defeatLogo, victoryLogo } from "@/public/images";
+import { useSearchParams } from "next/navigation";
+import { socket } from "../core/SocketComponent";
+import { updateLoading } from "@/redux/socket/controller";
 
 const GameEndModel = () => {
   const { router } = useAppTheme();
   const state = useSelector((e: RootReducerType) => e?.model?.status);
+  const loading = useSelector((e: RootReducerType) => e?.game?.loading);
   const stateData = useSelector((e: RootReducerType) => e?.model?.data);
-
+  const searchParams = useSearchParams();
+  const username = searchParams.get("username");
   return (
     <Modal
       isOpen={state == "game-end"}
@@ -59,6 +64,7 @@ const GameEndModel = () => {
               router.push("/");
               store.dispatch(closeModel());
             }}
+            isLoading={loading}
             color="primary"
             variant="flat"
             className="flex-1"
@@ -67,7 +73,11 @@ const GameEndModel = () => {
             Back
           </Button>
           <Button
-            onClick={() => {}}
+            isLoading={loading}
+            onClick={() => {
+              store.dispatch(updateLoading(true));
+              socket.emit("pair", JSON.stringify({ user: username }));
+            }}
             color="primary"
             className="flex-1"
             fullWidth

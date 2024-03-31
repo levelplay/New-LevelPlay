@@ -9,8 +9,9 @@ import { Button } from "@nextui-org/react";
 import "@pixi/events";
 import { Container, Graphics, Sprite, Stage } from "@pixi/react";
 import { useSearchParams } from "next/navigation";
-import React, { FC, useEffect, useMemo, useState } from "react";
+import React, {  useEffect, useState } from "react";
 import { useSelector } from "react-redux";
+import { useRouter } from "next/navigation";
 
 // config
 const boxWidth = 125;
@@ -69,9 +70,10 @@ const TikTakTokGame = () => {
   const [turn, setTurn] = useState<number>(1);
   const [currentTurn, setCurrentTurn] = useState<number>(1);
   const searchParams = useSearchParams();
+  const username = searchParams.get("username");
   const player = searchParams.get("player");
   const user = useSelector((e: RootReducerType) => e.auth.user);
-  const email = searchParams.get("email");
+  const router = useRouter();
   useEffect(() => {
     if (player == "player2") {
       setTurn(2);
@@ -91,12 +93,13 @@ const TikTakTokGame = () => {
       store.dispatch(
         changeModelStatus("game-end", { status: "win", player: turn })
       );
+      router.replace('/')
     });
     socket.on("gameLose", (e) => {
-      console.log("gameLose");
       store.dispatch(
         changeModelStatus("game-end", { status: "lose", player: turn })
       );
+      router.replace('/')
     });
   });
   const defultData = [
@@ -140,16 +143,16 @@ const TikTakTokGame = () => {
             title: "Player 1",
             description: (player
               ? player == "player1"
-                ? user?.email
-                : email
+                ? user?.username
+                : username
               : "") as string,
           },
           {
             title: "Player 2",
             description: (player
               ? player == "player2"
-                ? user?.email
-                : email
+                ? user?.username
+                : username
               : "") as string,
           },
         ]}
@@ -285,7 +288,10 @@ const TikTakTokGame = () => {
         </Stage>
       </SafetyLayer>
       <div className=" absolute w-full py-6 bottom-0 left-0 flex justify-center items-center z">
-        <Button color="danger" className=" w-40">Quit</Button>
+        <Button onClick={(e)=>{
+          socket.emit('quit', '');
+          router.replace('/');
+        }} color="danger" className=" w-40">Quit</Button>
       </div>
     </main>
   );
