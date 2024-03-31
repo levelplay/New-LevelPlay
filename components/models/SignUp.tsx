@@ -26,6 +26,7 @@ const SignUpModel = () => {
       .string()
       .email("Invalid email address")
       .required("This field is required"),
+    nameName: yup.string().required("This field is required"),
     password: yup.string().required("This field is required"),
     code: yup.string().length(6, "Code must be 6 digit"),
   });
@@ -39,19 +40,20 @@ const SignUpModel = () => {
 
   const submitForm = handleSubmit(
     (data) => {
-      store.dispatch(
-        signUpThunk({
-          email: data.email,
-          password: data.password,
-          code: data.code,
-        })
-      ).then((e: any)=>{
-        console.log(e);
-        if(e.success){
-          store.dispatch(closeModel());
-        }
-      });
-     
+      store
+        .dispatch(
+          signUpThunk({
+            email: data.email,
+            password: data.password,
+            code: data.code,
+          })
+        )
+        .then((e: any) => {
+          console.log(e);
+          if (e.success) {
+            store.dispatch(closeModel());
+          }
+        });
     },
     () => {
       store.dispatch(showErrorThunk("Please resolve errors"));
@@ -72,6 +74,13 @@ const SignUpModel = () => {
             <ModalBody>
               <h6 className="text-xl pt-5 pb-3 font-medium">Sign Up</h6>
               <FormTextField
+                name="nameName"
+                inputProps={{
+                  label: "User Name",
+                  placeholder: "Enter your user name",
+                }}
+              />
+              <FormTextField
                 name="email"
                 inputProps={{
                   label: "Email",
@@ -85,27 +94,31 @@ const SignUpModel = () => {
                   label: "Verification Code",
                   type: "number",
                   placeholder: "Enter verification code",
-                  endContent: <Button 
-                  disabled={loading}
-                  isLoading={loading} 
-                  onClick={(e) => {
-                    const email = getValues("email");
-                      if (email && email.length > 0) {
-                        store.dispatch(
-                          SendTokenThunk({
-                            email: email || "",
-                            type: 1,
-                          })
-                        );
-                      } else {
-                        store.dispatch(
-                          showErrorThunk(
-                            "Please fill your email address"
-                          )
-                        );
-                      }
-                  }}
-                  color="primary" className="h-full w-36">Send Code</Button>,
+                  endContent: (
+                    <Button
+                      disabled={loading}
+                      isLoading={loading}
+                      onClick={(e) => {
+                        const email = getValues("email");
+                        if (email && email.length > 0) {
+                          store.dispatch(
+                            SendTokenThunk({
+                              email: email || "",
+                              type: 1,
+                            })
+                          );
+                        } else {
+                          store.dispatch(
+                            showErrorThunk("Please fill your email address")
+                          );
+                        }
+                      }}
+                      color="primary"
+                      className="h-full w-36"
+                    >
+                      Send Code
+                    </Button>
+                  ),
                 }}
               />
               <FormPasswordField
@@ -117,7 +130,13 @@ const SignUpModel = () => {
               />
             </ModalBody>
             <ModalFooter>
-              <Button isLoading={loading}  color="primary" type="submit" className="my-2" fullWidth>
+              <Button
+                isLoading={loading}
+                color="primary"
+                type="submit"
+                className="my-2"
+                fullWidth
+              >
                 Continue
               </Button>
             </ModalFooter>

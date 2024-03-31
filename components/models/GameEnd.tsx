@@ -30,21 +30,27 @@ const GameEndModel = () => {
       <ModalContent>
         <ModalBody className="py-6 pb-4 flex justify-center items-center">
           {stateData?.status == "win" ? (
-            <Image
-              src={victoryLogo}
-              alt="Victory-Logo"
-              width={200}
-              height={100}
-              className="h-auto w-[90%]"
-            />
+            <>
+              <Image
+                src={victoryLogo}
+                alt="Victory-Logo"
+                width={200}
+                height={100}
+                className="h-auto w-[90%]"
+              />
+              <h6 className=" text-xl text-center"> User Name win</h6>
+            </>
           ) : (
-            <Image
-              src={defeatLogo}
-              alt="Defeat-Logo"
-              width={200}
-              height={100}
-              className="h-auto w-[90%]"
-            />
+            <>
+              <Image
+                src={defeatLogo}
+                alt="Defeat-Logo"
+                width={200}
+                height={100}
+                className="h-auto w-[90%]"
+              />
+              <h6 className=" text-xl text-center"> User Name win</h6>
+            </>
           )}
         </ModalBody>
         <ModalFooter>
@@ -54,9 +60,19 @@ const GameEndModel = () => {
               store.dispatch(closeModel());
             }}
             color="primary"
+            variant="flat"
             className="flex-1"
+            fullWidth
           >
-            Go Back
+            Back
+          </Button>
+          <Button
+            onClick={() => {}}
+            color="primary"
+            className="flex-1"
+            fullWidth
+          >
+            Rematch
           </Button>
         </ModalFooter>
       </ModalContent>

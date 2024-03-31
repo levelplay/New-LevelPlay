@@ -18,13 +18,32 @@ const UserAvatar = () => {
   const user = useSelector((e: RootReducerType) => e?.auth?.user);
 
   return user ? (
-    <Dropdown placement="bottom">
+    <Dropdown placement="bottom-end">
       <DropdownTrigger>
-        <Avatar isBordered name={user.username} color="primary" className=" cursor-pointer" />
+        <Avatar
+          isBordered
+          name={user.username}
+          color="primary"
+          className=" cursor-pointer"
+        />
       </DropdownTrigger>
-      <DropdownMenu aria-label="Profile Actions"  variant="flat">
+      <DropdownMenu aria-label="Profile Actions" variant="flat">
         <DropdownItem key="profile" className="h-14 gap-2">
           <User description={user.email} name={user.username} />
+        </DropdownItem>
+        <DropdownItem
+          onClick={() => {
+            store.dispatch(changeModelStatus("game-start"));
+          }}
+        >
+          Play Now
+        </DropdownItem>
+        <DropdownItem
+          onClick={() => {
+            store.dispatch(changeModelStatus("leader-board"));
+          }}
+        >
+          Leaderboard
         </DropdownItem>
         <DropdownItem
           color="danger"
