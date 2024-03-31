@@ -5,6 +5,7 @@ import SafetyLayer from "@/components/layout/SafetyLayer";
 import { circleMark, crossMark, emptyMark } from "@/public/images";
 import { changeModelStatus } from "@/redux/model/controller";
 import { RootReducerType, store } from "@/redux/store";
+import { Button } from "@nextui-org/react";
 import "@pixi/events";
 import { Container, Graphics, Sprite, Stage } from "@pixi/react";
 import { useSearchParams } from "next/navigation";
@@ -165,8 +166,8 @@ const TikTakTokGame = () => {
         >
           <Container
             position={[
-              deviceWidth / 2 - boxWidth * 1.5,
-              deviceHeight / 2 - boxWidth,
+              deviceWidth / 2 - boxWidth * 1.6,
+              deviceHeight / 2 - boxWidth * 1.3,
             ]}
           >
             {[1, 2].map((e, key) => {
@@ -283,6 +284,9 @@ const TikTakTokGame = () => {
           </Container>
         </Stage>
       </SafetyLayer>
+      <div className=" absolute w-full py-6 bottom-0 left-0 flex justify-center items-center z">
+        <Button color="danger" className=" w-40">Quit</Button>
+      </div>
     </main>
   );
 };
