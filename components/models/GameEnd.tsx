@@ -23,6 +23,7 @@ const GameEndModel = () => {
   const stateData = useSelector((e: RootReducerType) => e?.model?.data);
   const searchParams = useSearchParams();
   const username = searchParams.get("username");
+
   return (
     <Modal
       isOpen={state == "game-end"}
@@ -43,7 +44,10 @@ const GameEndModel = () => {
                 height={100}
                 className="h-auto w-[90%]"
               />
-              <h6 className=" text-xl text-center"> User Name win</h6>
+              <h6 className=" text-xl text-center">
+                {" "}
+                {username ?? `Player ${stateData?.player}`} win
+              </h6>
             </>
           ) : (
             <>
@@ -54,7 +58,10 @@ const GameEndModel = () => {
                 height={100}
                 className="h-auto w-[90%]"
               />
-              <h6 className=" text-xl text-center"> User Name win</h6>
+              <h6 className=" text-xl text-center">
+                {" "}
+                {username ?? `Player ${stateData?.player}`} defeat
+              </h6>
             </>
           )}
         </ModalBody>

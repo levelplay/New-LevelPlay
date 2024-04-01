@@ -9,7 +9,7 @@ import { Button } from "@nextui-org/react";
 import "@pixi/events";
 import { Container, Graphics, Sprite, Stage } from "@pixi/react";
 import { useSearchParams } from "next/navigation";
-import React, {  useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useRouter } from "next/navigation";
 
@@ -74,6 +74,85 @@ const TikTakTokGame = () => {
   const player = searchParams.get("player");
   const user = useSelector((e: RootReducerType) => e.auth.user);
   const router = useRouter();
+  const [containerData, setContainerData] = useState([
+    [0, 0, 0],
+    [0, 0, 0],
+    [0, 0, 0],
+  ]);
+
+  const onAction = (c_item: number, c_key: number, p_key: number) => {
+    if (c_item == 0) {
+      const currentData = [...containerData];
+      const userIcon = turn;
+      if (player) {
+        if (currentTurn == turn) {
+          currentData[p_key][c_key] = userIcon;
+          socket.emit("turn", JSON.stringify({ turn, data: currentData }));
+          setContainerData(currentData);
+          const draw = isdraw(currentData);
+          if (draw) {
+            store.dispatch(
+              changeModelStatus("game-end", {
+                status: "draw",
+                player: turn,
+              })
+            );
+          }
+          if (currentTurn == 1) {
+            setCurrentTurn(2);
+          } else {
+            setCurrentTurn(1);
+          }
+        }
+        return;
+      }
+      currentData[p_key][c_key] = userIcon;
+      setContainerData(currentData);
+      const win = playerWin(currentData, turn);
+      const draw = isdraw(currentData);
+      if (draw) {
+        store.dispatch(
+          changeModelStatus("game-end", {
+            status: "draw",
+            player: turn,
+          })
+        );
+      }
+      if (win) {
+        store.dispatch(
+          changeModelStatus("game-end", {
+            status: "win",
+            player: turn,
+          })
+        );
+      }
+      if (turn == 1) {
+        setTurn(2);
+      } else {
+        setTurn(1);
+      }
+    }
+  };
+
+  const onTimeUp = () => {
+    if (player) {
+      if (currentTurn == turn) {
+        socket.emit("turn", JSON.stringify({ turn, data: containerData }));
+        if (currentTurn == 1) {
+          setCurrentTurn(2);
+        } else {
+          setCurrentTurn(1);
+        }
+      }
+    } else {
+      if (turn == 1) {
+        setTurn(2);
+      } else {
+        setTurn(1);
+      }
+    }
+  };
+
   useEffect(() => {
     if (player == "player2") {
       setTurn(2);
@@ -93,51 +172,21 @@ const TikTakTokGame = () => {
       store.dispatch(
         changeModelStatus("game-end", { status: "win", player: turn })
       );
-      router.replace('/')
+      router.replace("/");
     });
     socket.on("gameLose", (e) => {
       store.dispatch(
         changeModelStatus("game-end", { status: "lose", player: turn })
       );
-      router.replace('/')
+      router.replace("/");
     });
   });
-  const defultData = [
-    [0, 0, 0],
-    [0, 0, 0],
-    [0, 0, 0],
-  ];
-  const [containerData, setContainerData] = useState([
-    [0, 0, 0],
-    [0, 0, 0],
-    [0, 0, 0],
-  ]);
 
   return (
     <main>
       <GameNavBar
         activeUser={player ? currentTurn : turn}
-        onTimeUp={() => {
-          if (player) {
-            if (currentTurn == turn) {
-              socket.emit(
-                "turn",
-                JSON.stringify({ turn, data: containerData })
-              );
-              if (currentTurn == 1) {
-                setCurrentTurn(2);
-              } else {
-                setCurrentTurn(1);
-              }
-            }
-          } else {
-            if (turn == 1) {
-              setTurn(2);
-            } else {
-              setTurn(1);
-            }
-          }
-        }}
+        onTimeUp={onTimeUp}
         users={[
           {
             title: "Player 1",
@@ -218,60 +267,7 @@ const TikTakTokGame = () => {
                         key={`${p_key}${c_key}`}
                         interactive={true}
                         onclick={() => {
-                          if (c_item == 0) {
-                            const currentData = [...containerData];
-                            const userIcon = turn;
-                            if (player) {
-                              if (currentTurn == turn) {
-                                currentData[p_key][c_key] = userIcon;
-                                socket.emit(
-                                  "turn",
-                                  JSON.stringify({ turn, data: currentData })
-                                );
-                                setContainerData(currentData);
-                                const draw = isdraw(currentData);
-                                if (draw) {
-                                  store.dispatch(
-                                    changeModelStatus("game-end", {
-                                      status: "draw",
-                                      player: turn,
-                                    })
-                                  );
-                                }
-                                if (currentTurn == 1) {
-                                  setCurrentTurn(2);
-                                } else {
-                                  setCurrentTurn(1);
-                                }
-                              }
-                              return;
-                            }
-                            currentData[p_key][c_key] = userIcon;
-                            setContainerData(currentData);
-                            const win = playerWin(currentData, turn);
-                            const draw = isdraw(currentData);
-                            if (draw) {
-                              store.dispatch(
-                                changeModelStatus("game-end", {
-                                  status: "draw",
-                                  player: turn,
-                                })
-                              );
-                            }
-                            if (win) {
-                              store.dispatch(
-                                changeModelStatus("game-end", {
-                                  status: "win",
-                                  player: turn,
-                                })
-                              );
-                            }
-                            if (turn == 1) {
-                              setTurn(2);
-                            } else {
-                              setTurn(1);
-                            }
-                          }
+                          onAction(c_item, c_key, p_key);
                         }}
                         x={boxWidth * c_key + dividerWidth * c_key + boxPadding}
                         y={boxWidth * p_key + dividerWidth * p_key + boxPadding}
@@ -288,10 +284,16 @@ const TikTakTokGame = () => {
         </Stage>
       </SafetyLayer>
       <div className=" absolute w-full py-6 bottom-0 left-0 flex justify-center items-center z">
-        <Button onClick={(e)=>{
-          socket.emit('quit', '');
-          router.replace('/');
-        }} color="danger" className=" w-40">Quit</Button>
+        <Button
+          onClick={(e) => {
+            socket.emit("quit", "");
+            router.replace("/");
+          }}
+          color="danger"
+          className=" w-40"
+        >
+          Quit
+        </Button>
       </div>
     </main>
   );
