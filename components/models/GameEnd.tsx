@@ -12,7 +12,7 @@ import { useSelector } from "react-redux";
 import { useAppTheme } from "@/theme/apptheme";
 import Image from "next/image";
 import { defeatLogo, victoryLogo } from "@/public/images";
-import { useSearchParams } from "next/navigation";
+// import { useSearchParams } from "next/navigation";
 import { socket } from "../core/SocketComponent";
 import { updateLoading } from "@/redux/socket/controller";
 
@@ -21,8 +21,8 @@ const GameEndModel = () => {
   const state = useSelector((e: RootReducerType) => e?.model?.status);
   const loading = useSelector((e: RootReducerType) => e?.game?.loading);
   const stateData = useSelector((e: RootReducerType) => e?.model?.data);
-  const searchParams = useSearchParams();
-  const username = searchParams.get("username");
+  // const searchParams = useSearchParams();
+  // const username = searchParams.get("username");
 
   return (
     <Modal
@@ -46,7 +46,7 @@ const GameEndModel = () => {
               />
               <h6 className=" text-xl text-center">
                 {" "}
-                {username ?? `Player ${stateData?.player}`} win
+                {stateData?.username ?? `Player ${stateData?.player}`} win
               </h6>
             </>
           ) : (
@@ -60,7 +60,7 @@ const GameEndModel = () => {
               />
               <h6 className=" text-xl text-center">
                 {" "}
-                {username ?? `Player ${stateData?.player}`} defeat
+                {stateData?.username ?? `Player ${stateData?.player}`} defeat
               </h6>
             </>
           )}
@@ -83,7 +83,10 @@ const GameEndModel = () => {
             isLoading={loading}
             onClick={() => {
               store.dispatch(updateLoading(true));
-              socket.emit("pair", JSON.stringify({ user: username }));
+              socket.emit(
+                "pair",
+                JSON.stringify({ user: stateData?.username })
+              );
             }}
             color="primary"
             className="flex-1"

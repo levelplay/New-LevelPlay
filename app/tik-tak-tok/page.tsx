@@ -8,7 +8,6 @@ import { RootReducerType, store } from "@/redux/store";
 import { Button } from "@nextui-org/react";
 import "@pixi/events";
 import { Container, Graphics, Sprite, Stage } from "@pixi/react";
-import { useSearchParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useRouter } from "next/navigation";
@@ -66,14 +65,13 @@ const isdraw = (moves: number[][]) => {
   return true;
 };
 
-const TikTakTokGame = () => {
+const TikTakTokGame = (data: any) => {
+  const router = useRouter();
   const [turn, setTurn] = useState<number>(1);
   const [currentTurn, setCurrentTurn] = useState<number>(1);
-  const searchParams = useSearchParams();
-  const username = searchParams.get("username");
-  const player = searchParams.get("player");
+  const username = data.searchParams["username"];
+  const player = data.searchParams["player"];
   const user = useSelector((e: RootReducerType) => e.auth.user);
-  const router = useRouter();
   const [containerData, setContainerData] = useState([
     [0, 0, 0],
     [0, 0, 0],
@@ -95,6 +93,7 @@ const TikTakTokGame = () => {
               changeModelStatus("game-end", {
                 status: "draw",
                 player: turn,
+                username: username
               })
             );
           }
@@ -115,6 +114,7 @@ const TikTakTokGame = () => {
           changeModelStatus("game-end", {
             status: "draw",
             player: turn,
+            username: username
           })
         );
       }
@@ -123,6 +123,7 @@ const TikTakTokGame = () => {
           changeModelStatus("game-end", {
             status: "win",
             player: turn,
+            username: username
           })
         );
       }
@@ -163,27 +164,43 @@ const TikTakTokGame = () => {
       const draw = isdraw(data.data);
       if (draw) {
         store.dispatch(
-          changeModelStatus("game-end", { status: "draw", player: turn })
+          changeModelStatus("game-end", {
+            status: "draw",
+            player: turn,
+            username: username,
+          })
         );
       }
       setCurrentTurn(data.turn);
     });
     socket.on("gameWin", (e) => {
       store.dispatch(
-        changeModelStatus("game-end", { status: "win", player: turn })
+        changeModelStatus("game-end", {
+          status: "win",
+          player: turn,
+          username: username,
+        })
       );
       router.replace("/");
     });
     socket.on("gameLose", (e) => {
       store.dispatch(
-        changeModelStatus("game-end", { status: "lose", player: turn })
+        changeModelStatus("game-end", {
+          status: "lose",
+          player: turn,
+          username: username,
+        })
       );
       router.replace("/");
     });
   });
 
   return (
-    <main>
+    <main
+      onClick={() => {
+        console.log(data);
+      }}
+    >
       <GameNavBar
         activeUser={player ? currentTurn : turn}
         onTimeUp={onTimeUp}
