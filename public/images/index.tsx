@@ -4,8 +4,9 @@ import homeBanner from "./banner.jpeg";
 import circleMark from "./circle-mark.png";
 import crossMark from "./cross-mark.png";
 import emptyMark from "./empty-mark.png";
-import victoryLogo from "./victory-logo.png";
-import defeatLogo from "./defeat-logo.png";
+import gameWin from "./game-win.png";
+import gameLose from "./game-lose.png";
+import gameDraw from "./game-draw.png";
 
 export {
   blackFavicon,
@@ -14,6 +15,7 @@ export {
   crossMark,
   circleMark,
   emptyMark,
-  victoryLogo,
-  defeatLogo,
+  gameWin,
+  gameLose,
+  gameDraw,
 };

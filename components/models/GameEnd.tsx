@@ -11,8 +11,7 @@ import {
 import { useSelector } from "react-redux";
 import { useAppTheme } from "@/theme/apptheme";
 import Image from "next/image";
-import { defeatLogo, victoryLogo } from "@/public/images";
-// import { useSearchParams } from "next/navigation";
+import { gameDraw, gameWin, gameLose } from "@/public/images";
 import { socket } from "../core/SocketComponent";
 import { updateLoading } from "@/redux/socket/controller";
 
@@ -21,8 +20,48 @@ const GameEndModel = () => {
   const state = useSelector((e: RootReducerType) => e?.model?.status);
   const loading = useSelector((e: RootReducerType) => e?.game?.loading);
   const stateData = useSelector((e: RootReducerType) => e?.model?.data);
-  // const searchParams = useSearchParams();
-  // const username = searchParams.get("username");
+
+  const components: any = {
+    win: (
+      <>
+        <Image
+          src={gameWin}
+          alt="Victory-Logo"
+          width={200}
+          height={100}
+          className="h-auto w-[90%]"
+        />
+        <h6 className=" text-xl text-center">
+          {" "}
+          {stateData?.username ?? `Player ${stateData?.player}`} win
+        </h6>
+      </>
+    ),
+    lose: (
+      <>
+        <Image
+          src={gameLose}
+          alt="Defeat-Logo"
+          width={200}
+          height={100}
+          className="h-auto w-[90%]"
+        />
+        <h6 className=" text-xl text-center">
+          {" "}
+          {stateData?.username ?? `Player ${stateData?.player}`} defeat
+        </h6>
+      </>
+    ),
+    draw: (
+      <Image
+        src={gameDraw}
+        alt="Defeat-Logo"
+        width={200}
+        height={100}
+        className="h-auto w-[90%]"
+      />
+    ),
+  };
 
   return (
     <Modal
@@ -35,35 +74,7 @@ const GameEndModel = () => {
     >
       <ModalContent>
         <ModalBody className="py-6 pb-4 flex justify-center items-center">
-          {stateData?.status == "win" ? (
-            <>
-              <Image
-                src={victoryLogo}
-                alt="Victory-Logo"
-                width={200}
-                height={100}
-                className="h-auto w-[90%]"
-              />
-              <h6 className=" text-xl text-center">
-                {" "}
-                {stateData?.username ?? `Player ${stateData?.player}`} win
-              </h6>
-            </>
-          ) : (
-            <>
-              <Image
-                src={defeatLogo}
-                alt="Defeat-Logo"
-                width={200}
-                height={100}
-                className="h-auto w-[90%]"
-              />
-              <h6 className=" text-xl text-center">
-                {" "}
-                {stateData?.username ?? `Player ${stateData?.player}`} defeat
-              </h6>
-            </>
-          )}
+          {components[stateData?.status ?? 2]}
         </ModalBody>
         <ModalFooter>
           <Button
