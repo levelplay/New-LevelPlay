@@ -69,6 +69,7 @@ const GameEndModel = () => {
       classNames={{
         base: "bg-black",
       }}
+      hideCloseButton
       size="sm"
       radius="lg"
     >
@@ -79,7 +80,6 @@ const GameEndModel = () => {
         <ModalFooter>
           <Button
             onClick={() => {
-              router.push("/");
               store.dispatch(closeModel());
             }}
             isLoading={loading}
@@ -93,11 +93,16 @@ const GameEndModel = () => {
           <Button
             isLoading={loading}
             onClick={() => {
-              store.dispatch(updateLoading(true));
-              socket.emit(
-                "pair",
-                JSON.stringify({ user: stateData?.username })
-              );
+              if(stateData?.username ){
+                store.dispatch(updateLoading(true));
+                socket.emit(
+                  "pair",
+                  JSON.stringify({ user: stateData?.username })
+                );
+              }else{
+                router.push("/tik-tak-tok");
+                store.dispatch(closeModel());
+              }
             }}
             color="primary"
             className="flex-1"

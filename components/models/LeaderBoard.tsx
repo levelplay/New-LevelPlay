@@ -43,16 +43,16 @@ const LeaderBoardModel = () => {
             <div className="flex items-end justify-center">
               <Avatar
                 className="w-12 h-12 translate-x-[16px]"
-                name={data?.data?.users[1].username}
+                name={data?.data?.users[1]?.username || ''}
               />
               <Avatar
                 className="w-14 h-14 z-10"
-                name={data?.data?.users[0].username}
+                name={data?.data?.users[0]?.username || ''}
                 isBordered
               />
               <Avatar
                 className="w-12 h-12 translate-x-[-16px]"
-                name={data?.data?.users[2].username}
+                name={data?.data?.users[2]?.username || ''}
               />
             </div>
           ) : (

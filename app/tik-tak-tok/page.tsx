@@ -117,6 +117,7 @@ const TikTakTokGame = (data: any) => {
             username: username
           })
         );
+      router.replace("/");
       }
       if (win) {
         store.dispatch(
@@ -126,6 +127,7 @@ const TikTakTokGame = (data: any) => {
             username: username
           })
         );
+      router.replace("/");
       }
       if (turn == 1) {
         setTurn(2);

@@ -22,14 +22,14 @@ const UserAvatar = () => {
       <DropdownTrigger>
         <Avatar
           isBordered
-          name={user.username}
+          name={user?.username}
           color="primary"
           className=" cursor-pointer"
         />
       </DropdownTrigger>
       <DropdownMenu aria-label="Profile Actions" variant="flat">
         <DropdownItem key="profile" className="h-14 gap-2">
-          <User description={user.email} name={user.username} />
+          <User description={user.email} name={user?.username} />
         </DropdownItem>
         <DropdownItem
           onClick={() => {
