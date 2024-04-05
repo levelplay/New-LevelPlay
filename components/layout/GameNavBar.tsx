@@ -8,7 +8,6 @@ interface DataModel {
   users: {
     image?: string;
     title: string;
-    description: string;
   }[];
   activeUser: number;
   onTimeUp: () => void;
@@ -41,20 +40,9 @@ const GameNavBar: FC<DataModel> = ({ users, activeUser, onTimeUp }) => {
         {users.map((e, key) => {
           return (
             <div key={key} style={{ order: key }}>
-              <User
-                key={key}
-                name={e.title}
-                description={e.description}
-                className=" max-md:hidden"
-                avatarProps={{
-                  className: "w-12 h-12",
-                  isBordered: true,
-                  color: key == activeUser - 1 ? "primary" : "default",
-                }}
-              />
               <Avatar
-                className="w-12 h-12 md:hidden"
                 name={e.title}
+                size="lg"
                 color={key == activeUser - 1 ? "primary" : "default"}
                 isBordered
               />

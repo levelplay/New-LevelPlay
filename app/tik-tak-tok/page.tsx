@@ -67,6 +67,7 @@ const isdraw = (moves: number[][]) => {
 
 const TikTakTokGame = (data: any) => {
   const router = useRouter();
+  console.log(data);
   const [turn, setTurn] = useState<number>(1);
   const [currentTurn, setCurrentTurn] = useState<number>(1);
   const username = data.searchParams["username"];
@@ -206,20 +207,18 @@ const TikTakTokGame = (data: any) => {
         onTimeUp={onTimeUp}
         users={[
           {
-            title: "Player 1",
-            description: (player
+            title: player
               ? player == "player1"
                 ? user?.username
                 : username
-              : "") as string,
+              : "P1",
           },
           {
-            title: "Player 2",
-            description: (player
+            title: (player
               ? player == "player2"
                 ? user?.username
                 : username
-              : "") as string,
+              : "P2") as string,
           },
         ]}
       />
