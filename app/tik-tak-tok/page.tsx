@@ -2,7 +2,7 @@
 import { socket } from "@/components/core/SocketComponent";
 import GameNavBar from "@/components/layout/GameNavBar";
 import SafetyLayer from "@/components/layout/SafetyLayer";
-import { circleMark, crossMark, emptyMark } from "@/public/images";
+import { circleMark, crossMark, emptyMark, whiteFavicon } from "@/public/images";
 import { changeModelStatus } from "@/redux/model/controller";
 import { RootReducerType, store } from "@/redux/store";
 import { Button } from "@nextui-org/react";
@@ -13,7 +13,7 @@ import { useSelector } from "react-redux";
 import { useRouter } from "next/navigation";
 
 // config
-const playerIcon = [emptyMark.src, circleMark.src, crossMark.src];
+const playerIcon = [emptyMark.src, crossMark.src, circleMark.src];
 const deviceWidth = typeof window == "undefined" ? 0 : window.innerWidth;
 const deviceHeight = typeof window == "undefined" ? 0 : window.innerHeight;
 const boxWidth = deviceWidth < 600 ? 100 : 125;
@@ -173,6 +173,7 @@ const TikTakTokGame = (data: any) => {
             username: username,
           })
         );
+      router.replace("/");
       }
       setCurrentTurn(data.turn);
     });
@@ -200,9 +201,6 @@ const TikTakTokGame = (data: any) => {
 
   return (
     <main
-      onClick={() => {
-        console.log(data);
-      }}
     >
       <GameNavBar
         activeUser={player ? currentTurn : turn}
@@ -284,6 +282,9 @@ const TikTakTokGame = (data: any) => {
                       <Sprite
                         key={`${p_key}${c_key}`}
                         interactive={true}
+                        ontap={()=>{
+                          onAction(c_item, c_key, p_key);
+                        }}
                         onclick={() => {
                           onAction(c_item, c_key, p_key);
                         }}
