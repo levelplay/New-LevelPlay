@@ -9,7 +9,7 @@ const SplashScreen = () => {
           className="text-4xl font-semibold text-nowrap"
           style={{ letterSpacing: "4px" }}
         >
-          Level Play
+          LevelPlay
         </h3>
         <svg
           aria-hidden="true"

@@ -11,7 +11,7 @@ const HomeNavbar = () => {
           className="text-2xl font-semibold text-nowrap"
           style={{ letterSpacing: "4px" }}
         >
-          Level Play
+          LevelPlay
         </h3>
         <SafetyLayer>
           <UserAvatar />

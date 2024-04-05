@@ -36,10 +36,10 @@ const AppFooter = () => {
             className="text-2xl max-sm:text-xl font-semibold"
             style={{ letterSpacing: "4px" }}
           >
-            Level Play
+            LevelPlay
           </h3>
           <div className="text-stone-300 text-sm font-normal max-md:hidden">
-            © Level Play - All Rights Reserved
+            © LevelPlay - All Rights Reserved
           </div>
           <div className="flex gap-3 max-sm:gap-1">
             {socialMedia.map((e, key) => {
