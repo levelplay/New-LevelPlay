@@ -17,9 +17,6 @@ const HeroSection = () => {
             <br />
             whoever
           </h1>
-          <h3 className="text-base pt-2 opacity-85">
-            This can be useful when you want to remove filters conditionally,
-          </h3>
           <div className="w-full flex gap-4 pt-6">
             <Button
               radius="full"
