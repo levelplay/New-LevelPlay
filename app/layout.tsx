@@ -4,6 +4,8 @@ import CustomLayer from "@/theme/CustomLayer";
 import "../theme/globals.css";
 import { appMetaData } from "@/constants/metaData";
 import { appFont } from "@/theme/theme";
+import SafetyLayer from "@/components/layout/SafetyLayer";
+import SplashScreen from "@/components/layout/SplashScreen";
 
 export const metadata = appMetaData.main;
 
@@ -20,6 +22,9 @@ export default function RootLayout({
       <body
         className={`${appFont.className} dark text-foreground bg-background`}
       >
+        <SafetyLayer isReverse>
+          <SplashScreen />
+        </SafetyLayer>
         <CustomLayer>{children}</CustomLayer>
       </body>
     </html>

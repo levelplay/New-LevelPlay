@@ -37,7 +37,7 @@ const GameNavBar: FC<DataModel> = ({ users, activeUser, onTimeUp }) => {
 
   return (
     <header className="w-full bg-opacity-80 backdrop-blur absolute left-0 top-0 bg-[hsla(0,0%,10%,0.9)]">
-      <AppContainer className="flex items-center justify-center h-28 gap-16">
+      <AppContainer className="flex items-center justify-center h-28 gap-16 max-sm:gap-8">
         {users.map((e, key) => {
           return (
             <div key={key} style={{ order: key }}>

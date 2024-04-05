@@ -13,17 +13,13 @@ import { useSelector } from "react-redux";
 import { useRouter } from "next/navigation";
 
 // config
-const boxWidth = 125;
-const dividerWidth = 10;
-const iconWidth = 95;
-const boxPadding = 15;
-const mobileBoxWidth = 100;
-const mobileDividerWidth = 8;
-const mobileIconWidth = 76;
-const mobileBoxPadding = 12;
 const playerIcon = [emptyMark.src, circleMark.src, crossMark.src];
 const deviceWidth = typeof window == "undefined" ? 0 : window.innerWidth;
 const deviceHeight = typeof window == "undefined" ? 0 : window.innerHeight;
+const boxWidth = deviceWidth < 600 ? 100 : 125;
+const dividerWidth = deviceWidth < 600 ? 8 : 10;
+const iconWidth = deviceWidth < 600 ? 76 : 95;
+const boxPadding = deviceWidth < 600 ? 12 : 15;
 
 const playerWin = (moves: number[][], player: number) => {
   if (moves[0][0] == player && moves[0][1] == player && moves[0][2] == player) {
@@ -231,7 +227,7 @@ const TikTakTokGame = (data: any) => {
       />
       <SafetyLayer>
         <Stage
-          className="!w-full !h-screen max-sm:hidden"
+          className="!w-full !h-screen"
           width={deviceWidth}
           height={deviceHeight}
           options={{
@@ -296,89 +292,6 @@ const TikTakTokGame = (data: any) => {
                         y={boxWidth * p_key + dividerWidth * p_key + boxPadding}
                         width={iconWidth}
                         height={iconWidth}
-                        image={playerIcon[c_item]}
-                      />
-                    );
-                  })}
-                </>
-              );
-            })}
-          </Container>
-        </Stage>
-        <Stage
-          className="!w-full !h-screen md:hidden"
-          width={deviceWidth}
-          height={deviceHeight}
-          options={{
-            hello: true,
-            backgroundColor: 0x141414,
-          }}
-        >
-          <Container
-            position={[
-              deviceWidth / 2 - mobileBoxWidth * 1.6,
-              deviceHeight / 2 - mobileBoxWidth * 1.3,
-            ]}
-          >
-            {[1, 2].map((e, key) => {
-              return (
-                <Graphics
-                  key={key}
-                  draw={(g) => {
-                    g.clear();
-                    g.beginFill(0xffffff, 1);
-                    g.drawRoundedRect(
-                      0,
-                      mobileBoxWidth * e + mobileDividerWidth * key,
-                      mobileBoxWidth * 3 + mobileDividerWidth * 2,
-                      mobileDividerWidth,
-                      5
-                    );
-                  }}
-                />
-              );
-            })}
-            {[1, 2].map((e, key) => {
-              return (
-                <Graphics
-                  key={key}
-                  draw={(g) => {
-                    g.clear();
-                    g.beginFill(0xffffff, 1);
-                    g.drawRoundedRect(
-                      mobileBoxWidth * e + mobileDividerWidth * key,
-                      0,
-                      mobileDividerWidth,
-                      mobileBoxWidth * 3 + mobileDividerWidth * 2,
-                      5
-                    );
-                  }}
-                />
-              );
-            })}
-            {containerData.map((p_item, p_key) => {
-              return (
-                <>
-                  {p_item.map((c_item, c_key) => {
-                    return (
-                      <Sprite
-                        key={`${p_key}${c_key}`}
-                        interactive={true}
-                        onclick={() => {
-                          onAction(c_item, c_key, p_key);
-                        }}
-                        x={
-                          mobileBoxWidth * c_key +
-                          mobileDividerWidth * c_key +
-                          mobileBoxPadding
-                        }
-                        y={
-                          mobileBoxWidth * p_key +
-                          mobileDividerWidth * p_key +
-                          mobileBoxPadding
-                        }
-                        width={mobileIconWidth}
-                        height={mobileIconWidth}
                         image={playerIcon[c_item]}
                       />
                     );
