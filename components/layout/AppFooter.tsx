@@ -33,15 +33,15 @@ const AppFooter = () => {
       <AppContainer>
         <div className="flex justify-between items-center">
           <h3
-            className="text-2xl font-semibold"
+            className="text-2xl max-sm:text-xl font-semibold"
             style={{ letterSpacing: "4px" }}
           >
             Level Play
           </h3>
-          <div className="text-stone-300 text-sm font-normal">
+          <div className="text-stone-300 text-sm font-normal max-md:hidden">
             © Level Play - All Rights Reserved
           </div>
-          <div className="flex gap-3">
+          <div className="flex gap-3 max-sm:gap-1">
             {socialMedia.map((e, key) => {
               return (
                 <Button

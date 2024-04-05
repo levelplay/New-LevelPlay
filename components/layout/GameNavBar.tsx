@@ -1,7 +1,7 @@
 "use client";
 import React, { FC, ReactNode, useEffect, useState } from "react";
 import { AppContainer } from "./AppContainer";
-import { User } from "@nextui-org/react";
+import { Avatar, User } from "@nextui-org/react";
 import { Doughnut } from "react-chartjs-2";
 import { Chart, ArcElement } from "chart.js";
 interface DataModel {
@@ -26,7 +26,7 @@ const GameNavBar: FC<DataModel> = ({ users, activeUser, onTimeUp }) => {
         setTime(time - 1);
       }
     }, 1000);
-    return ()=> clearInterval(timeout);
+    return () => clearInterval(timeout);
   }, [time]);
 
   useEffect(() => {
@@ -40,17 +40,25 @@ const GameNavBar: FC<DataModel> = ({ users, activeUser, onTimeUp }) => {
       <AppContainer className="flex items-center justify-center h-28 gap-16">
         {users.map((e, key) => {
           return (
-            <User
-              key={key}
-              name={e.title}
-              style={{ order: key }}
-              description={e.description}
-              avatarProps={{
-                className: "w-12 h-12",
-                isBordered: true,
-                color: key == activeUser - 1 ? "primary" : "default",
-              }}
-            />
+            <div key={key} style={{ order: key }}>
+              <User
+                key={key}
+                name={e.title}
+                description={e.description}
+                className=" max-md:hidden"
+                avatarProps={{
+                  className: "w-12 h-12",
+                  isBordered: true,
+                  color: key == activeUser - 1 ? "primary" : "default",
+                }}
+              />
+              <Avatar
+                className="w-12 h-12 md:hidden"
+                name={e.title}
+                color={key == activeUser - 1 ? "primary" : "default"}
+                isBordered
+              />
+            </div>
           );
         })}
         <div className="relative w-20 h-20 flex justify-center items-center order-[0.5]">

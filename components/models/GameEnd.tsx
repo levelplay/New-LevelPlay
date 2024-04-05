@@ -20,6 +20,7 @@ const GameEndModel = () => {
   const state = useSelector((e: RootReducerType) => e?.model?.status);
   const loading = useSelector((e: RootReducerType) => e?.game?.loading);
   const stateData = useSelector((e: RootReducerType) => e?.model?.data);
+  const user = useSelector((e: RootReducerType) => e?.auth.user);
 
   const components: any = {
     win: (
@@ -33,7 +34,10 @@ const GameEndModel = () => {
         />
         <h6 className=" text-xl text-center">
           {" "}
-          {stateData?.username ?? `Player ${stateData?.player}`} win
+          {stateData?.username
+            ? user?.username
+            : `Player ${stateData?.player}`}{" "}
+          win
         </h6>
       </>
     ),
@@ -48,7 +52,10 @@ const GameEndModel = () => {
         />
         <h6 className=" text-xl text-center">
           {" "}
-          {stateData?.username ?? `Player ${stateData?.player}`} defeat
+          {stateData?.username
+            ? user?.username
+            : `Player ${stateData?.player}`}{" "}
+          defeat
         </h6>
       </>
     ),
@@ -93,13 +100,13 @@ const GameEndModel = () => {
           <Button
             isLoading={loading}
             onClick={() => {
-              if(stateData?.username ){
+              if (stateData?.username) {
                 store.dispatch(updateLoading(true));
                 socket.emit(
                   "pair",
                   JSON.stringify({ user: stateData?.username })
                 );
-              }else{
+              } else {
                 router.push("/tik-tak-tok");
                 store.dispatch(closeModel());
               }

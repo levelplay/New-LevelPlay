@@ -56,25 +56,28 @@ const UserAvatar = () => {
       </DropdownMenu>
     </Dropdown>
   ) : (
-    <div className="flex gap-4">
-      <Button
-        color="primary"
-        onClick={() => {
-          store.dispatch(changeModelStatus("signIn"));
-        }}
-      >
-        Sign in
-      </Button>
-      <Button
-        variant="bordered"
-        color="primary"
-        onClick={() => {
-          store.dispatch(changeModelStatus("signUp"));
-        }}
-      >
-        Sign up
-      </Button>
-    </div>
+    <>
+      <div className="flex gap-4">
+        <Button
+          color="primary"
+          onClick={() => {
+            store.dispatch(changeModelStatus("signIn"));
+          }}
+        >
+          Sign in
+        </Button>
+        <Button
+          variant="bordered"
+          color="primary"
+          className=" max-sm:hidden"
+          onClick={() => {
+            store.dispatch(changeModelStatus("signUp"));
+          }}
+        >
+          Sign up
+        </Button>
+      </div>
+    </>
   );
 };
 

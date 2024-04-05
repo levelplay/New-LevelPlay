@@ -38,9 +38,9 @@ const SignInModel = () => {
 
   const submitForm = handleSubmit(
     (data) => {
-      store.dispatch(LoginThunk(data)).then((result: any)=>{
+      store.dispatch(LoginThunk(data)).then((result: any) => {
         if (result.success) {
-        store.dispatch(closeModel());
+          store.dispatch(closeModel());
         }
       });
     },
@@ -91,10 +91,27 @@ const SignInModel = () => {
                 </div>
               </div>
             </ModalBody>
-            <ModalFooter>
-              <Button isLoading={loading} color="primary" type="submit" className="my-2" fullWidth>
+            <ModalFooter className="flex-col">
+              <Button
+                isLoading={loading}
+                color="primary"
+                type="submit"
+                className="my-2"
+                fullWidth
+              >
                 Continue
               </Button>
+              <p className=" text-center text-sm py-3">
+                {"Don't have an account?"}{" "}
+                <span
+                  onClick={() => {
+                    store.dispatch(changeModelStatus("signUp"));
+                  }}
+                  className="cursor-pointer text-primary hover:underline"
+                >
+                  Sign Up
+                </span>
+              </p>
             </ModalFooter>
           </form>
         </FormProvider>

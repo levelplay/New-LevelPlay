@@ -13,7 +13,7 @@ import {
 } from "@nextui-org/react";
 import { FormProvider, useForm } from "react-hook-form";
 import { useSelector } from "react-redux";
-import { closeModel } from "@/redux/model/controller";
+import { changeModelStatus, closeModel } from "@/redux/model/controller";
 import FormTextField from "../input/FormTextField";
 import FormPasswordField from "../input/FormPasswordField";
 import { SendTokenThunk, signUpThunk } from "@/redux/auth/controller";
@@ -130,7 +130,7 @@ const SignUpModel = () => {
                 }}
               />
             </ModalBody>
-            <ModalFooter>
+            <ModalFooter className="flex-col">
               <Button
                 isLoading={loading}
                 color="primary"
@@ -140,6 +140,17 @@ const SignUpModel = () => {
               >
                 Continue
               </Button>
+              <p className=" text-center text-sm py-3">
+                {"Already have an account?"}{" "}
+                <span
+                  onClick={() => {
+                    store.dispatch(changeModelStatus("signIn"));
+                  }}
+                  className="cursor-pointer text-primary hover:underline"
+                >
+                  Sign In
+                </span>
+              </p>
             </ModalFooter>
           </form>
         </FormProvider>
