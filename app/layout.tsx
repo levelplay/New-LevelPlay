@@ -26,24 +26,24 @@ export default function RootLayout({
         <SafetyLayer isReverse>
           <SplashScreen />
         </SafetyLayer>
-        <Script
-          async
-          src={`https://www.googletagmanager.com/gtag/js?id=G-6KYK89VWZH`}
-        ></Script>
-        <Script
-          id="google-analytics"
-          dangerouslySetInnerHTML={{
-            __html: `
+        <CustomLayer>{children}</CustomLayer>
+      </body>
+      <Script
+        async
+        src={`https://www.googletagmanager.com/gtag/js?id=G-6KYK89VWZH`}
+      ></Script>
+      <Script
+        id="google-analytics"
+        dangerouslySetInnerHTML={{
+          __html: `
           window.dataLayer = window.dataLayer || [];
           function gtag(){dataLayer.push(arguments);}
           gtag('js', new Date());
 
           gtag('config', 'G-6KYK89VWZH');
         `,
-          }}
-        ></Script>
-        <CustomLayer>{children}</CustomLayer>
-      </body>
+        }}
+      ></Script>
     </html>
   );
 }
