@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import CustomLayer from "@/theme/CustomLayer";
+import Script from "next/script";
 import "../theme/globals.css";
 import { appMetaData } from "@/constants/metaData";
 import { appFont } from "@/theme/theme";
@@ -25,6 +26,22 @@ export default function RootLayout({
         <SafetyLayer isReverse>
           <SplashScreen />
         </SafetyLayer>
+        <Script
+          async
+          src={`https://www.googletagmanager.com/gtag/js?id=G-6KYK89VWZH`}
+        ></Script>
+        <Script
+          id="google-analytics"
+          dangerouslySetInnerHTML={{
+            __html: `
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+
+          gtag('config', 'G-6KYK89VWZH');
+        `,
+          }}
+        ></Script>
         <CustomLayer>{children}</CustomLayer>
       </body>
     </html>
