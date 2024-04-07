@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "server": "pm2 delete gameF && next build && pm2 start 'npm run start' --name gameF"
+    "pm2": "pm2 delete gameF && next build && pm2 start 'npm run start' --name gameF"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.3.4",
