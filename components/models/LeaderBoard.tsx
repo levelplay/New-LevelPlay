@@ -65,7 +65,7 @@ const LeaderBoardModel = () => {
               Watch LeaderBoard
             </h5>
             <p className="text-sm text-center text-foreground-400">
-            The leaderboard resets every 5 minutes. Your current progress will reset in {data.data.diff}
+            The leaderboard resets every 5 minutes. Your current progress will reset in {data?.data?.diff}
             </p>
           </div>
         </ModalHeader>
