@@ -7,6 +7,7 @@ import {
   ModalBody,
   ModalContent,
   ModalHeader,
+  Spinner,
   User,
 } from "@nextui-org/react";
 import { useSelector } from "react-redux";
@@ -16,6 +17,7 @@ import { fetcher } from "@/core/http";
 const LeaderBoardModel = () => {
   const state = useSelector((e: RootReducerType) => e?.model?.status);
   const { data, error, isLoading } = useSWR("/me/leaderboard", fetcher);
+  const userData = data?.data?.users ?? [];
   const positions = [
     "1st",
     "2nd",
@@ -63,14 +65,17 @@ const LeaderBoardModel = () => {
               Watch LeaderBoard
             </h5>
             <p className="text-sm text-center text-foreground-400">
-              You’ve created a new project! Invite colleagues to collaborate on
-              this project.
+            The leaderboard resets every 5 minutes. Your current progress will reset in {data.data.diff}
             </p>
           </div>
         </ModalHeader>
         <ModalBody className="pb-6 pt-0">
           <div className="flex flex-col gap-4">
-            {(isLoading ? [] : data?.data?.users || []).map(
+            {isLoading ? <div className="flex item-center justify-center h-16">
+              <Spinner label="loading..." />
+            </div> : userData.length == 0 ? <div className="flex item-center justify-center h-12 underline">
+              <p>No Data Found!</p>
+            </div> : userData.map(
               (e: any, key: any) => {
                 return (
                   <div
