@@ -4,41 +4,23 @@ import { AppContainer } from "../layout/AppContainer";
 import { Button } from "@nextui-org/react";
 import { store } from "@/redux/store";
 import { changeModelStatus } from "@/redux/model/controller";
+import GameCard from "../card/GameCard";
+import CommingSoonCard from "../card/CommingSoon";
 
 const HeroSection = () => {
   return (
-    <section className="w-full h-[calc(100vh-154px)] relative">
-      <div className="w-full h-full top-0 left-0 z-10 absolute">
-        <AppContainer className="flex flex-col h-full justify-center">
-          <h1 className="text-5xl leading-[125%] font-semibold capitalize">
+    <section className="w-full relative">
+      <div className="w-full">
+        <AppContainer className="flex flex-col h-full justify-center gap-6 pt-16 pb-24 max-sm:gap-8">
+          <h1 className="text-5xl leading-[125%] text-center font-semibold capitalize">
             Play whatever,
             <br />
-            wherever with
-            <br />
-            whoever
+            wherever with whoever
           </h1>
-          <div className="w-full flex gap-4 pt-6">
-            <Button
-              radius="full"
-              color="primary"
-              size="lg"
-              onClick={() => {
-                store.dispatch(changeModelStatus("game-start"));
-              }}
-            >
-              Play Now
-            </Button>
-            <Button
-              radius="full"
-              color="primary"
-              variant="bordered"
-              size="lg"
-              onClick={() => {
-                store.dispatch(changeModelStatus("leader-board"));
-              }}
-            >
-              Leaderboard
-            </Button>
+          <div className="flex justify-center pt-8 gap-6 max-sm:flex-col max-sm:gap-10">
+            <GameCard />
+            <CommingSoonCard />
+            <CommingSoonCard />
           </div>
         </AppContainer>
       </div>

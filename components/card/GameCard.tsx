@@ -1,20 +1,19 @@
 "use client";
 import React from "react";
-import Image from "next/image";
 import { Button } from "@nextui-org/react";
 import { MdOutlineLeaderboard } from "react-icons/md";
-import { homeBanner } from "@/public/images";
+import { homeBanner, tikTakTok } from "@/public/images";
 import { store } from "@/redux/store";
 import { changeModelStatus } from "@/redux/model/controller";
-import NextImage from "../other/NextImage";
+import Image from "next/image";
 
 const GameCard = () => {
   return (
     <div className="cursor-pointer">
-      <figure className="aspect-[5/3] rounded-2xl relative">
+      <figure className="aspect-video rounded-2xl relative overflow-hidden">
         <Button
           variant="flat"
-          className="absolute top-1 right-1 text-xl z-10"
+          className="absolute top-1 right-1 text-xl z-20"
           size="sm"
           isIconOnly
           onClick={() => {
@@ -23,16 +22,16 @@ const GameCard = () => {
         >
           <MdOutlineLeaderboard />
         </Button>
-        <NextImage
-          src={homeBanner.src}
+        <Image
+          src={tikTakTok}
+          width={400}
+          height={400}
           alt="game-image"
           className="w-full h-full object-cover"
-          isZoomed
-          isBlurred
         />
       </figure>
-      <div className="flex justify-between px-4 gap-4">
-        <h6 className="text-lg">Legends of the legends</h6>
+      <div className="flex justify-between px-4 gap-4 mt-4">
+        <h6 className="text-lg">Tik Tak Tok</h6>
         <Button
           radius="full"
           size="sm"

@@ -7,6 +7,8 @@ import emptyMark from "./empty-mark.png";
 import gameWin from "./game-win.png";
 import gameLose from "./game-lose.png";
 import gameDraw from "./game-draw.png";
+import tikTakTok from  './tikTakTok.png';
+import commingSoon from  './commingSoon.png';
 
 export {
   blackFavicon,
@@ -18,4 +20,6 @@ export {
   gameWin,
   gameLose,
   gameDraw,
+  tikTakTok,
+  commingSoon
 };

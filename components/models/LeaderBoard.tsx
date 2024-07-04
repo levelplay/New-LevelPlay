@@ -13,6 +13,7 @@ import {
 import { useSelector } from "react-redux";
 import useSWR from "swr";
 import { fetcher } from "@/core/http";
+import { format } from "date-fns";
 
 const LeaderBoardModel = () => {
   const state = useSelector((e: RootReducerType) => e?.model?.status);
@@ -64,8 +65,10 @@ const LeaderBoardModel = () => {
             <h5 className="text-lg font-semibold text-center">
               Watch LeaderBoard
             </h5>
-            <p className="text-sm text-center text-foreground-400">
-            The leaderboard resets every 5 minutes. Your current progress will reset in {data?.data?.diff}
+            <p className="text-sm text-center text-foreground-400" onClick={() => {
+              console.log(data?.data)
+            }}>
+            Most wins gets R100 in {data?.data?.diff}
             </p>
           </div>
         </ModalHeader>

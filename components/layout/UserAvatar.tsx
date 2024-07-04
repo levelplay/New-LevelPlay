@@ -31,7 +31,7 @@ const UserAvatar = () => {
         <DropdownItem key="profile" className="h-14 gap-2">
           <User description={user.email} name={user?.username} />
         </DropdownItem>
-        <DropdownItem
+        {/* <DropdownItem
           onClick={() => {
             store.dispatch(changeModelStatus("game-start"));
           }}
@@ -44,7 +44,7 @@ const UserAvatar = () => {
           }}
         >
           Leaderboard
-        </DropdownItem>
+        </DropdownItem> */}
         <DropdownItem
           color="danger"
           onClick={() => {
