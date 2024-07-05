@@ -10,18 +10,9 @@ import Image from "next/image";
 const GameCard = () => {
   return (
     <div className="cursor-pointer">
-      <figure className="aspect-video rounded-2xl relative overflow-hidden">
-        <Button
-          variant="flat"
-          className="absolute top-1 right-1 text-xl z-20"
-          size="sm"
-          isIconOnly
-          onClick={() => {
-            store.dispatch(changeModelStatus("leader-board"));
-          }}
-        >
-          <MdOutlineLeaderboard />
-        </Button>
+      <figure className="aspect-video rounded-2xl relative overflow-hidden" onClick={() => {
+        store.dispatch(changeModelStatus("game-start"));
+      }}>
         <Image
           src={tikTakTok}
           width={400}
@@ -31,16 +22,18 @@ const GameCard = () => {
         />
       </figure>
       <div className="flex justify-between px-4 gap-4 mt-4">
-        <h6 className="text-lg">Tik Tak Tok</h6>
+        <h6 className="text-lg" onClick={() => {
+          store.dispatch(changeModelStatus("game-start"));
+        }}>Tik Tak Tok</h6>
         <Button
           radius="full"
           size="sm"
           color="primary"
           onClick={() => {
-            store.dispatch(changeModelStatus("game-start"));
+            store.dispatch(changeModelStatus("leader-board"));
           }}
         >
-          Play Now
+          Leader Board
         </Button>
       </div>
     </div>
