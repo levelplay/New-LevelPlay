@@ -1,24 +1,25 @@
 "use client";
 import React from "react";
-import Image from "next/image";
 import { commingSoon } from "@/public/images";
+import { Card, CardBody, CardFooter } from "@nextui-org/react";
+import NextImage from "../other/NextImage";
 
 const CommingSoonCard = () => {
   return (
-    <div className="cursor-pointer">
-      <figure className="aspect-video rounded-2xl relative overflow-hidden">
-        <Image
-          src={commingSoon}
-          width={400}
-          height={400}
-          alt="game-image"
-          className="w-full h-full object-cover"
+    <Card className="max-w-40" shadow="sm">
+      <CardBody className="overflow-visible p-0">
+        <NextImage
+          shadow="sm"
+          radius="lg"
+          alt={'tik tak tok'}
+          className="aspect-square"
+          src={commingSoon.src}
         />
-      </figure>
-      <div className="flex justify-between px-4 gap-4 mt-4">
-        <h6 className="text-lg">Comming Soon</h6>
-      </div>
-    </div>
+      </CardBody>
+      <CardFooter className="text-small">
+        Comming
+      </CardFooter>
+    </Card>
   );
 };
 

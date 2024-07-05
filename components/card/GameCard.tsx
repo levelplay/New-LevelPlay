@@ -1,42 +1,28 @@
 "use client";
-import React from "react";
-import { Button } from "@nextui-org/react";
-import { MdOutlineLeaderboard } from "react-icons/md";
-import { homeBanner, tikTakTok } from "@/public/images";
+import { Card, CardBody, CardFooter } from "@nextui-org/react";
+import { tikTakTok } from "@/public/images";
 import { store } from "@/redux/store";
 import { changeModelStatus } from "@/redux/model/controller";
-import Image from "next/image";
+import NextImage from "../other/NextImage";
 
 const GameCard = () => {
   return (
-    <div className="cursor-pointer">
-      <figure className="aspect-video rounded-2xl relative overflow-hidden" onClick={() => {
-        store.dispatch(changeModelStatus("game-start"));
-      }}>
-        <Image
-          src={tikTakTok}
-          width={400}
-          height={400}
-          alt="game-image"
-          className="w-full h-full object-cover"
+    <Card shadow="sm" className="max-w-40" isPressable onPress={() => {
+      store.dispatch(changeModelStatus("game-start"));
+    }}>
+      <CardBody className="overflow-visible p-0">
+        <NextImage
+          shadow="sm"
+          radius="lg"
+          alt={'tik tak tok'}
+          className="aspect-square"
+          src={tikTakTok.src}
         />
-      </figure>
-      <div className="flex justify-between px-4 gap-4 mt-4">
-        <h6 className="text-lg" onClick={() => {
-          store.dispatch(changeModelStatus("game-start"));
-        }}>Tik Tak Tok</h6>
-        <Button
-          radius="full"
-          size="sm"
-          color="primary"
-          onClick={() => {
-            store.dispatch(changeModelStatus("leader-board"));
-          }}
-        >
-          Leader Board
-        </Button>
-      </div>
-    </div>
+      </CardBody>
+      <CardFooter className="text-small justify-between">
+        Tik Tak Tok
+      </CardFooter>
+    </Card>
   );
 };
 

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { FC, useState } from "react";
 import { closeModel } from "@/redux/model/controller";
 import { RootReducerType, store } from "@/redux/store";
 import {
@@ -11,13 +11,14 @@ import {
   User,
 } from "@nextui-org/react";
 import { useSelector } from "react-redux";
-import useSWR from "swr";
-import { fetcher } from "@/core/http";
-import { format } from "date-fns";
 
-const LeaderBoardModel = () => {
+interface DataModal {
+  data: any;
+  isLoading: boolean;
+}
+
+const LeaderBoardModel:FC<DataModal> = ({data, isLoading}) => {
   const state = useSelector((e: RootReducerType) => e?.model?.status);
-  const { data, error, isLoading } = useSWR("/me/leaderboard", fetcher);
   const userData = data?.data?.users ?? [];
   const positions = [
     "1st",

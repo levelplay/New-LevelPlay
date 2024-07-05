@@ -89,7 +89,7 @@ const GameStartModel = () => {
             fullWidth
           />
         </ModalBody>
-        <ModalFooter>
+        {/* <ModalFooter>
           <Button
             onClick={() => {
               push("/tik-tak-tok");
@@ -117,7 +117,7 @@ const GameStartModel = () => {
           >
             Random Play
           </Button>
-        </ModalFooter>
+        </ModalFooter> */}
       </ModalContent>
     </Modal>
   );
