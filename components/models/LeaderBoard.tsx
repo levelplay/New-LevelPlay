@@ -11,13 +11,15 @@ import {
   User,
 } from "@nextui-org/react";
 import { useSelector } from "react-redux";
+import Timer from "../core/Timer";
+import { showErrorThunk, showSuccessThunk } from "@/redux/toast/controller";
 
 interface DataModal {
   data: any;
   isLoading: boolean;
 }
 
-const LeaderBoardModel:FC<DataModal> = ({data, isLoading}) => {
+const LeaderBoardModel: FC<DataModal> = ({ data, isLoading }) => {
   const state = useSelector((e: RootReducerType) => e?.model?.status);
   const userData = data?.data?.users ?? [];
   const positions = [
@@ -69,7 +71,14 @@ const LeaderBoardModel:FC<DataModal> = ({data, isLoading}) => {
             <p className="text-sm text-center text-foreground-400" onClick={() => {
               console.log(data?.data)
             }}>
-            Most wins gets R100 in {data?.data?.diff}
+              Most wins gets R100 in {data?.data ? <Timer data={data?.data} onComplete={() => {
+                store.dispatch(showErrorThunk('Dear users round has been over'));
+                if (userData.length > 0) {
+                  setTimeout(() => {
+                    store.dispatch(showSuccessThunk(`This round winner is ${userData[0]?.username}`));
+                  }, 4000)
+                }
+              }} /> : <></>}
             </p>
           </div>
         </ModalHeader>
