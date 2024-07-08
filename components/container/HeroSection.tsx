@@ -10,6 +10,7 @@ import { Button } from "@nextui-org/react";
 import { store } from "@/redux/store";
 import { changeModelStatus } from "@/redux/model/controller";
 import Timer from "../core/Timer";
+import { showErrorThunk } from "@/redux/toast/controller";
 
 const HeroSection = () => {
   const { data, isLoading, } = useSWR("/me/leaderboard", fetcher);
@@ -22,7 +23,7 @@ const HeroSection = () => {
             <h1 className="text-5xl leading-[125%] text-center font-semibold capitalize max-sm:text-start">
               Most wins gets R100 <br className="max-sm:hidden" /> in {data?.data ? <Timer data={data?.data} onComplete={() => {
                 mutate("/me/leaderboard");
-              }} /> : <></>}
+              }} /> : "00:00"}
             </h1>
             <Button color="primary" className="max-w-48" onClick={() => {
               store.dispatch(changeModelStatus('leader-board'))

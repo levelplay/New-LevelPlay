@@ -22,5 +22,5 @@ const CommingSoonCard = () => {
     </Card>
   );
 };
-
+1
 export default CommingSoonCard;
