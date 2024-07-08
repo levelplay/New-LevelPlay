@@ -124,7 +124,7 @@ const AppToast = () => {
       <div
         id="toast-challenge"
         aria-checked={challengeMessage}
-        className="flex items-center max-w-full w-fit max-sm:w-[calc(100%-48px)] px-2 py-2 gap-3 text-gray-500 bg-white rounded-lg  shadow-md fixed bottom-6 left-6 scale-0 opacity-0 aria-checked:scale-100 aria-checked:opacity-100 duration-100 z-[1000000]"
+        className="flex items-center max-w-full w-fit max-sm:w-[calc(100%-32px)] px-2 py-2 gap-3 text-gray-500 bg-white rounded-lg  shadow-md fixed bottom-6 left-6 max-sm:bottom-4 max-sm:left-4 max-sm:right-4  scale-0 opacity-0 aria-checked:scale-100 aria-checked:opacity-100 duration-100 z-[1000000]"
       >
         <div className="inline-flex items-center justify-center text-2xl flex-shrink-0 w-8 h-8 text-orange-500 bg-gray-100 rounded-lg">
           <FaFantasyFlightGames />
