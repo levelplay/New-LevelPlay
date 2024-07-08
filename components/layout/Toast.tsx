@@ -129,7 +129,7 @@ const AppToast = () => {
         <div className="inline-flex items-center justify-center text-2xl flex-shrink-0 w-8 h-8 text-orange-500 bg-gray-100 rounded-lg">
           <FaFantasyFlightGames />
         </div>
-        <div className="text-sm font-normal text-zinc-900 flex-1">
+        <div className="text-sm font-normal text-ellipsis overflow-hidden whitespace-nowrap text-zinc-900 flex-1">
           {state.challenge}
         </div>
         <div className="flex gap-1">
