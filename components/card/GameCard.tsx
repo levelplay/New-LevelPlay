@@ -20,7 +20,7 @@ const GameCard = () => {
         />
       </CardBody>
       <CardFooter className="text-small justify-between">
-        Tik Tak Tok
+        Tic Tac Toe
       </CardFooter>
     </Card>
   );

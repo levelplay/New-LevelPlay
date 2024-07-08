@@ -17,7 +17,7 @@ const CommingSoonCard = () => {
         />
       </CardBody>
       <CardFooter className="text-small">
-        Comming
+        Coming soon
       </CardFooter>
     </Card>
   );
