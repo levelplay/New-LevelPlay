@@ -19,13 +19,14 @@ const HeroSection = () => {
     <section className="w-full relative">
       <div className="w-full">
         <AppContainer className="flex flex-col h-full justify-center gap-14 py-20 min-h-[calc(100vh-154px)]">
-          <div className="flex items-center justify-center flex-col gap-6 max-sm:items-start">
+          <div className="flex items-center justify-center flex-col gap-2 max-sm:items-start">
             <h1 className="text-5xl leading-[125%] text-center font-semibold capitalize max-sm:text-start">
               Most wins gets R100 <br className="max-sm:hidden" /> in {data?.data ? <Timer data={data?.data} onComplete={() => {
                 mutate("/me/leaderboard");
               }} /> : "00:00"}
             </h1>
-            <Button color="primary" className="max-w-48" onClick={() => {
+            <p className="text-base text-center max-sm:text-start">Payment for User with most wins will be via email</p>
+            <Button color="primary" className="max-w-48 mt-4" onClick={() => {
               store.dispatch(changeModelStatus('leader-board'))
             }} fullWidth>
               Leader Board

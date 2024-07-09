@@ -35,8 +35,7 @@ const GameStartModel = () => {
           <div className="flex flex-col items-start gap-1">
             <h5 className="text-lg font-semibold">Play Multiple Game</h5>
             <p className="text-sm text-foreground-400">
-              You’ve created a new project! Invite colleagues to collaborate on
-              this project.
+              Opponent must be online to accept challenge!
             </p>
           </div>
         </ModalHeader>
