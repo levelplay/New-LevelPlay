@@ -27,8 +27,7 @@ const SignUpModel = () => {
       .email("Invalid email address")
       .required("This field is required"),
     username: yup.string().required("This field is required"),
-    password: yup.string().required("This field is required"),
-    code: yup.string().length(6, "Code must be 6 digit"),
+    password: yup.string().required("This field is required")
   });
 
   const formMethods = useForm({
@@ -45,7 +44,6 @@ const SignUpModel = () => {
           signUpThunk({
             email: data.email,
             password: data.password,
-            code: data.code,
             username: data.username,
           })
         )
@@ -89,7 +87,7 @@ const SignUpModel = () => {
                   placeholder: "Enter your email",
                 }}
               />
-              <FormTextField
+              {/* <FormTextField
                 name="code"
                 inputProps={{
                   label: "Verification Code",
@@ -121,7 +119,7 @@ const SignUpModel = () => {
                     </Button>
                   ),
                 }}
-              />
+              /> */}
               <FormPasswordField
                 name="password"
                 inputProps={{
