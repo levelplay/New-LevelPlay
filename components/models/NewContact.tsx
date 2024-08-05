@@ -15,9 +15,11 @@ import { FormProvider, useForm } from "react-hook-form";
 import { useSelector } from "react-redux";
 import { closeModel } from "@/redux/model/controller";
 import FormTextField from "../input/FormTextField";
+import { addContact } from "@/redux/chat/controller";
 
 const NewContactModel = () => {
   const state = useSelector((e: RootReducerType) => e?.model?.status);
+  const loading = useSelector((e: RootReducerType) => e?.chat.loading);
 
   const formSchema = yup.object().shape({
     email: yup
@@ -34,8 +36,14 @@ const NewContactModel = () => {
   const { handleSubmit, reset } = formMethods;
 
   const submitForm = handleSubmit(
-    (data) => {},
-    () => {
+    (data) => {
+      const result = store.dispatch(addContact(data.email));
+      if (result.success) {
+        store.dispatch(closeModel());
+        reset({});
+      }
+    },
+    (e) => {
       store.dispatch(showErrorThunk("Please resolve errors"));
     }
   );
@@ -63,7 +71,13 @@ const NewContactModel = () => {
               />
             </ModalBody>
             <ModalFooter className="flex-col">
-              <Button color="primary" type="submit" className="my-2" fullWidth>
+              <Button
+                color="primary"
+                type="submit"
+                className="my-2"
+                isLoading={loading}
+                fullWidth
+              >
                 Add Contact
               </Button>
             </ModalFooter>

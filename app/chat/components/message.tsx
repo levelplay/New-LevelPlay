@@ -1,151 +1,141 @@
 "use client";
+import Image from "next/image";
 import ActionButton from "@/components/input/ActionButton";
+import { socket } from "@/components/core/SocketComponent";
 import { NextPage } from "@/core/type";
 import { noMessage } from "@/public/svg";
-import { Avatar, Button, Input, Textarea } from "@nextui-org/react";
-import Image from "next/image";
-import { FC, useState } from "react";
+import {
+  addMessage,
+  getChat,
+  getContact,
+  removeContact,
+} from "@/redux/chat/controller";
+import { RootReducerType, store } from "@/redux/store";
+import { useAppTheme } from "@/theme/apptheme";
+import { Avatar, Button, Spinner, Textarea } from "@nextui-org/react";
+import { FC, useEffect, useRef, useState } from "react";
 import { FaArrowUp } from "react-icons/fa6";
-
-const messagingChatConversations = [
-  {
-    message:
-      "Hello, I'm having some trouble with a piece of software I recently downloaded from your site. It keeps crashing every time I try to open it.",
-    name: "Taylor Smith",
-    time: "14:31",
-  },
-  {
-    message: "Every time I attempt to launch the software, it crashes",
-    name: "Taylor Smith",
-    time: "14:35",
-    imageUrl:
-      "https://nextuipro.nyc3.cdn.digitaloceanspaces.com/components-images/dummy/screenshot-1.png",
-  },
-  {
-    message:
-      "Thank you for letting me know, Taylor. Can you tell me which version of the software you're using and what operating system you're on?",
-    name: "Kate Moore (Support)",
-    time: "14:39",
-    isMe: true,
-  },
-  {
-    message:
-      "I'm using version 5.2 of the software on Windows 10. It sounds like there might be an issue with the .NET framework on your PC.",
-    name: "Taylor Smith",
-    time: "15:20",
-  },
-  {
-    message:
-      "Thank you for providing those details. It does seem like it could be related to the .NET Framework. To address this, I recommend the following steps:",
-    name: "Kate Moore (Support)",
-    time: "15:23",
-    isMe: true,
-  },
-  {
-    message:
-      "Please ensure that you have the latest .NET Framework installed. You can download it directly from the Microsoft website.",
-    name: "Kate Moore (Support)",
-    time: "15:24",
-    isMe: true,
-  },
-  {
-    message:
-      "After updating or verifying that you have the latest .NET Framework, please restart your computer.",
-    name: "Kate Moore (Support)",
-    time: "15:24",
-    isMe: true,
-  },
-  {
-    message:
-      "Okay, I've updated the .NET Framework and restarted my computer, but the issue persists. The software still crashes upon launching.",
-    name: "Taylor Smith",
-    time: "16:01",
-  },
-  {
-    message:
-      "I'm sorry to hear that the problem continues. Let's try reinstalling the software. Please uninstall the current version, download a fresh copy from our website, and then install that version.",
-    name: "Kate Moore (Support)",
-    time: "16:05",
-    isMe: true,
-  },
-  {
-    message:
-      "I've reinstalled the software as you suggested, but unfortunately, it's still not working. It crashes immediately after I open it.",
-    name: "Taylor Smith",
-    time: "16:25",
-  },
-  {
-    message:
-      "Thank you for trying those steps. It seems like a more specific issue with your system. Could you please provide us with the error log that appears when the software crashes? This will help us identify the exact problem.",
-    name: "Kate Moore (Support)",
-    time: "16:30",
-    isMe: true,
-  },
-  {
-    message:
-      "Sure, here is the error log. I hope this helps to find a solution.",
-    name: "Taylor Smith",
-    time: "16:40",
-  },
-  {
-    message:
-      "Thank you, Taylor. This is very helpful. Our technical team will review the error log, and I'll get back to you with a solution as soon as possible.",
-    name: "Kate Moore (Support)",
-    time: "16:45",
-    isMe: true,
-  },
-];
+import { useSelector } from "react-redux";
+import { format } from "date-fns";
 
 const MessageContainer: FC<NextPage> = ({ searchParams }) => {
+  const { router } = useAppTheme();
   const [message, setMessage] = useState<string>("");
+  const scrollContainer = useRef<HTMLDivElement | null>(null);
+  const user = useSelector((e: RootReducerType) => e?.auth?.user);
+  const chatData = useSelector((e: RootReducerType) => e?.chat?.chat);
+  const loading = useSelector((e: RootReducerType) => e?.chat?.lazyLoading);
+
+  function isScrolledToBottom() {
+    if (scrollContainer.current) {
+      const scrollTop = scrollContainer.current.scrollTop;
+      const scrollHeight = scrollContainer.current.scrollHeight;
+      const clientHeight = scrollContainer.current.clientHeight;
+      return Math.abs(scrollHeight - scrollTop - clientHeight) < 100;
+    }
+    return false;
+  }
+
+  useEffect(() => {
+    async function fetchData() {
+      await store.dispatch(getChat(searchParams.contactId));
+      if (scrollContainer.current) {
+        scrollContainer.current.scrollTop =
+          scrollContainer.current.scrollHeight;
+      }
+    }
+    fetchData();
+  }, [searchParams.contactId]);
+
+  useEffect(() => {
+    store.dispatch(getContact());
+    console.log("socket is on");
+    socket.on("newChat", async (e) => {
+      await store.dispatch(addMessage(e));
+      if (scrollContainer.current && isScrolledToBottom()) {
+        scrollContainer.current.scrollTop =
+          scrollContainer.current.scrollHeight;
+      }
+    });
+  }, []);
 
   return (
-    <div className="border border-divider col-span-2 rounded-r-xl overflow-hidden grid">
-      {searchParams?.id ? (
+    <div
+      className="border border-divider col-span-2 rounded-r-xl overflow-hidden flex flex-col"
+      onClick={() => {
+        console.log(isScrolledToBottom());
+      }}
+    >
+      {searchParams?.contactId ? (
         <>
           <div className="h-17 flex items-center gap-2 border-b-small border-default-200 p-4 bg-default-50">
             <div className="w-full">
-              <div className="text-small font-semibold">Taylor Smith</div>
+              <div className="text-small font-semibold">
+                {searchParams?.name}
+              </div>
               <div className="mt-1 text-small text-default-500">
-                example123@gmail.com
+                {searchParams?.email}
               </div>
             </div>
             <ActionButton
               options={[
                 {
-                  children: "Delete",
+                  children: "Remove Chat",
                   color: "danger",
+                  onClick: async () => {
+                    const result = await store.dispatch(
+                      removeContact(searchParams?.contactId)
+                    );
+                    if (result.success) {
+                      router.push("/chat");
+                    }
+                  },
                 },
               ]}
             />
           </div>
-          <div className="flex w-full overflow-visible flex-1 flex-col gap-6 px-6 py-4 youtube-scroll-bar">
-            {messagingChatConversations.map((e, key) => (
-              <div
-                key={key}
-                aria-checked={e.isMe}
-                className={"flex gap-3 aria-checked:flex-row-reverse"}
-              >
-                <div className="relative flex-none">
-                  <Avatar name={e.name} />
-                </div>
-                <div className="flex w-full flex-col gap-4">
-                  <div className="relative w-full rounded-medium bg-content2 px-4 py-3 text-default-600">
-                    <div className="flex">
-                      <div className="w-full text-small font-semibold text-default-foreground">
-                        {e.name}
+          <div
+            ref={scrollContainer}
+            className="flex w-full overflow-visible scroll-smooth flex-1 flex-col gap-6 px-6 py-4 youtube-scroll-bar"
+          >
+            {loading ? (
+              <div className="flex-1 flex items-center pt-4 justify-center">
+                <Spinner label="loading..." />
+              </div>
+            ) : (
+              <></>
+            )}
+            {(chatData ?? []).map((e, key) => {
+              return (
+                <div
+                  key={key}
+                  aria-checked={e.senderId?._id == user?._id}
+                  className={"flex gap-3 aria-checked:flex-row-reverse"}
+                >
+                  <div className="relative flex-none">
+                    <Avatar
+                      name={e?.senderId?.username}
+                      src={e?.senderId?.pic}
+                    />
+                  </div>
+                  <div className="flex w-full flex-col gap-4">
+                    <div className="relative w-full rounded-medium bg-content2 px-4 py-3 text-default-600">
+                      <div className="flex">
+                        <div className="w-full text-small font-semibold text-default-foreground">
+                          {e?.senderId?.username}
+                        </div>
+                        <div className="flex-end text-small whitespace-nowrap text-default-400">
+                          {format(new Date(e.createdAt), "hh:mm a")}
+                        </div>
                       </div>
-                      <div className="flex-end text-small text-default-400">
-                        {e.time}
+                      <div className="mt-2 text-small text-default-900">
+                        {e.message}
                       </div>
-                    </div>
-                    <div className="mt-2 text-small text-default-900">
-                      {e.message}
                     </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
           <div className="p-3 pt-0">
             <Textarea
@@ -158,7 +148,31 @@ const MessageContainer: FC<NextPage> = ({ searchParams }) => {
               }}
               endContent={
                 <div className="flex h-10 flex-col justify-center">
-                  <Button isIconOnly className="bg-foreground" radius="lg">
+                  <Button
+                    isIconOnly
+                    className="bg-foreground"
+                    radius="lg"
+                    isDisabled={!message}
+                    onClick={async () => {
+                      socket.emit("chat", {
+                        ...searchParams,
+                        message: message,
+                      });
+                      const currentDate = new Date().toISOString();
+                      await store.dispatch(
+                        addMessage({
+                          senderId: user,
+                          message: message,
+                          createdAt: currentDate,
+                        })
+                      );
+                      setMessage("");
+                      if (scrollContainer.current) {
+                        scrollContainer.current.scrollTop =
+                          scrollContainer.current.scrollHeight;
+                      }
+                    }}
+                  >
                     <FaArrowUp className="cursor-pointer text-default-50 text-xl" />
                   </Button>
                 </div>
@@ -175,7 +189,7 @@ const MessageContainer: FC<NextPage> = ({ searchParams }) => {
           </div>
         </>
       ) : (
-        <div className="flex flex-col gap-6 justify-center bg-default-50 items-center">
+        <div className="flex flex-col gap-6 flex-1 justify-center bg-default-50 items-center">
           <Image
             src={noMessage}
             alt="no message"
