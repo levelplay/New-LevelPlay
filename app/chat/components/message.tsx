@@ -8,15 +8,18 @@ import {
   addMessage,
   getChat,
   getContact,
+  loadChat,
   removeContact,
 } from "@/redux/chat/controller";
 import { RootReducerType, store } from "@/redux/store";
 import { useAppTheme } from "@/theme/apptheme";
 import { Avatar, Button, Spinner, Textarea } from "@nextui-org/react";
 import { FC, useEffect, useRef, useState } from "react";
-import { FaArrowUp } from "react-icons/fa6";
+import { FaArrowLeft, FaArrowUp } from "react-icons/fa6";
 import { useSelector } from "react-redux";
 import { format } from "date-fns";
+import { IoReload } from "react-icons/io5";
+import Link from "next/link";
 
 const MessageContainer: FC<NextPage> = ({ searchParams }) => {
   const { router } = useAppTheme();
@@ -61,15 +64,16 @@ const MessageContainer: FC<NextPage> = ({ searchParams }) => {
 
   return (
     <div
-      className="border border-divider col-span-2 rounded-r-xl overflow-hidden flex flex-col"
-      onClick={() => {
-        console.log(isScrolledToBottom());
-      }}
+      aria-checked={searchParams.contactId == undefined}
+      className="border border-divider col-span-2 rounded-r-xl overflow-hidden flex flex-col max-md:col-span-3 max-md:rounded-none max-md:border-0 max-md:aria-checked:hidden"
     >
       {searchParams?.contactId ? (
         <>
-          <div className="h-17 flex items-center gap-2 border-b-small border-default-200 p-4 bg-default-50">
-            <div className="w-full">
+          <div className="h-17 flex items-center gap-2 border-b-small border-default-200 p-4 bg-[hsla(0,0%,10%)]">
+            <Button variant="light" radius="full" className="hidden max-md:flex" as={Link} href="/chat" isIconOnly>
+              <FaArrowLeft className="text-xl" />
+            </Button>
+            <div className="flex-1">
               <div className="text-small font-semibold">
                 {searchParams?.name}
               </div>
@@ -96,14 +100,29 @@ const MessageContainer: FC<NextPage> = ({ searchParams }) => {
           </div>
           <div
             ref={scrollContainer}
-            className="flex w-full overflow-visible scroll-smooth flex-1 flex-col gap-6 px-6 py-4 youtube-scroll-bar"
+            className="flex w-full overflow-visible scroll-smooth flex-1 flex-col gap-6 px-6 py-4 youtube-scroll-bar max-md:px-4"
           >
             {loading ? (
-              <div className="flex-1 flex items-center pt-4 justify-center">
+              <div className="flex-1 flex items-center pt-2 justify-center">
                 <Spinner label="loading..." />
               </div>
             ) : (
-              <></>
+              <div
+                aria-checked={(chatData?.length ?? 0) < 9}
+                className="flex justify-center pt-2 items-center aria-checked:hidden"
+              >
+                <Button
+                  color="primary"
+                  startContent={<IoReload />}
+                  onClick={() => {
+                    store.dispatch(
+                      loadChat(searchParams.contactId, chatData?.length)
+                    );
+                  }}
+                >
+                  Load More
+                </Button>
+              </div>
             )}
             {(chatData ?? []).map((e, key) => {
               return (
@@ -125,7 +144,7 @@ const MessageContainer: FC<NextPage> = ({ searchParams }) => {
                           {e?.senderId?.username}
                         </div>
                         <div className="flex-end text-small whitespace-nowrap text-default-400">
-                          {format(new Date(e.createdAt), "hh:mm a")}
+                          {format(new Date(e.createdAt), "dd,mm,yyyy - hh:mm")}
                         </div>
                       </div>
                       <div className="mt-2 text-small text-default-900">

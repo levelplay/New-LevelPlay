@@ -13,7 +13,7 @@ export interface dataType {
     data?: {
         contacts: {
             _id: string,
-            userId: string,
+            userId: UserType,
             otherUser: UserType
             createdAt: string,
             __v: number

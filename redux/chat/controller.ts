@@ -3,6 +3,7 @@ import { httpDelete, httpGet, httpPost } from "@/core/http";
 import { toastController } from "../toast/controller";
 import { initialStateType } from "../store";
 import { dataType } from "./type";
+import { constructURL } from "@/core/constructURL";
 
 const chatInitialState: initialStateType & dataType = {
     loading: false,
@@ -62,6 +63,24 @@ export const addMessage =
             }
         };
 
+export const loadChat =
+    (id: string, count?: number): any =>
+        async (dispatch: any) => {
+            try {
+                dispatch(chatController.actions.lazyLoading());
+                const result: any = await httpGet(constructURL(`me/chat?contactId=${id}`, {
+                    count: count ?? '0',
+                    limit: '10',
+                }));
+                dispatch(chatController.actions.loadChat(result));
+                dispatch(chatController.actions.stopLazyLoading());
+                return { success: true };
+            } catch (e: any) {
+                dispatch(toastController.actions.showError(e));
+                return { success: false };
+            }
+        };
+
 export const getChat =
     (id: string): any =>
         async (dispatch: any) => {
@@ -70,7 +89,10 @@ export const getChat =
                     data: []
                 }));
                 dispatch(chatController.actions.lazyLoading());
-                const result: any = await httpGet(`me/chat?contactId=${id}`);
+                const result: any = await httpGet(constructURL(`me/chat?contactId=${id}`, {
+                    count: '0',
+                    limit: '10',
+                }));
                 dispatch(chatController.actions.getChat(result));
                 dispatch(chatController.actions.stopLazyLoading());
                 return { success: true };

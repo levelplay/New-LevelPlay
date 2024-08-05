@@ -9,9 +9,9 @@ import { NextPage } from "@/core/type";
 const ChatPage = (props: NextPage) => {
   return (
     <>
-      <HomeNavbar />
-      <main className="w-full h-[calc(100vh-80px)]">
-        <AppContainer className="w-full h-full grid-cols-3 grid py-6">
+      <HomeNavbar className="max-md:hidden" />
+      <main className="w-full h-[calc(100vh-80px)] max-md:h-screen">
+        <AppContainer className="w-full h-full grid-cols-3 grid py-6 max-md:p-0">
           <ContactDrawer {...props} />
           <MessageContainer {...props} />
         </AppContainer>
