@@ -33,14 +33,29 @@ const ChatContainer = () => {
   }
 
   useEffect(() => {
-    store.dispatch(getCommunityChat());
-    socket.on("newChatGloble", async (e) => {
+    async function fetchChatData() {
+      const result = await store.dispatch(getCommunityChat());
+      if (result.success && scrollContainer.current) {
+        scrollContainer.current.scrollTop =
+          scrollContainer.current.scrollHeight;
+      }
+    }
+
+    fetchChatData();
+
+    const handleNewChat = async (e: any) => {
       await store.dispatch(addCommunityMessage(e));
       if (scrollContainer.current && isScrolledToBottom()) {
         scrollContainer.current.scrollTop =
           scrollContainer.current.scrollHeight;
       }
-    });
+    };
+
+    socket.on("newChatGloble", handleNewChat);
+
+    return () => {
+      socket.off("newChatGloble", handleNewChat); // Clean up the socket listener
+    };
   }, []);
 
   return (
@@ -48,6 +63,9 @@ const ChatContainer = () => {
       <div
         ref={scrollContainer}
         className="grid w-full overflow-visible scroll-smooth flex-1 youtube-scroll-bar"
+        onClick={() => {
+          console.log(isScrolledToBottom());
+        }}
       >
         <AppContainer className="flex flex-col gap-6 py-4 !max-w-5xl">
           {loading ? (
@@ -70,34 +88,42 @@ const ChatContainer = () => {
               </Button>
             </div>
           )}
-          {(chatData ?? []).map((e, key) => {
-            return (
-              <div
-                key={key}
-                aria-checked={e.userId?._id == user?._id}
-                className={"flex gap-3 max-w-2xl w-max aria-checked:flex-row-reverse aria-checked:ml-auto"}
-              >
-                <div className="relative flex-none">
-                  <Avatar name={e?.userId?.username} src={e?.userId?.pic} />
-                </div>
-                <div className="flex w-full flex-col gap-4">
-                  <div className="relative w-full rounded-medium bg-content2 px-4 py-3 text-default-600">
-                    <div className="flex gap-4">
-                      <div className="w-full text-small font-semibold text-default-foreground">
-                        {e?.userId?.username}
+          {(chatData ? [...chatData] : [])
+            .sort((a, b) => {
+              const aDate = new Date(a.createdAt).getTime();
+              const bDate = new Date(b.createdAt).getTime();
+              return aDate - bDate;
+            })
+            .map((e, key) => {
+              return (
+                <div
+                  key={key}
+                  aria-checked={e.userId?._id == user?._id}
+                  className={
+                    "flex gap-3 max-w-2xl w-max aria-checked:flex-row-reverse aria-checked:ml-auto"
+                  }
+                >
+                  <div className="relative flex-none">
+                    <Avatar name={e?.userId?.username} src={e?.userId?.pic} />
+                  </div>
+                  <div className="flex w-full flex-col gap-4">
+                    <div className="relative w-full rounded-medium bg-content2 px-4 py-3 text-default-600">
+                      <div className="flex gap-4">
+                        <div className="w-full text-small font-semibold text-default-foreground">
+                          {e?.userId?.username}
+                        </div>
+                        <div className="flex-end text-small whitespace-nowrap text-default-400">
+                          {format(new Date(e.createdAt), "dd,MM,yyyy - hh:mm")}
+                        </div>
                       </div>
-                      <div className="flex-end text-small whitespace-nowrap text-default-400">
-                        {format(new Date(e.createdAt), "dd,mm,yyyy - hh:mm")}
+                      <div className="mt-2 text-small text-default-900">
+                        {e.message}
                       </div>
-                    </div>
-                    <div className="mt-2 text-small text-default-900">
-                      {e.message}
                     </div>
                   </div>
                 </div>
-              </div>
-            );
-          })}
+              );
+            })}
         </AppContainer>
       </div>
       <AppContainer className="pb-4 pt-0 !max-w-5xl">
@@ -115,7 +141,7 @@ const ChatContainer = () => {
                 isIconOnly
                 className="bg-foreground"
                 radius="lg"
-                isDisabled={!message}
+                isDisabled={!(message.trim().length > 0)}
                 onClick={async () => {
                   socket.emit("chat-globle", {
                     message: message,

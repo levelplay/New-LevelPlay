@@ -51,10 +51,10 @@ const chatController = createSlice({
             state.communityChat = payload.data;
         },
         loadCommunityChat(state, { payload }) {
-            state.communityChat = [...payload.data, ...(state.communityChat ?? [])];
+            state.communityChat = [...(state.communityChat ?? []), ...payload.data,];
         },
         addCommunityMessage(state, { payload }) {
-            state.communityChat = [...(state.communityChat ?? []), payload];
+            state.communityChat = [payload, ...(state.communityChat ?? [])];
         },
     },
 });

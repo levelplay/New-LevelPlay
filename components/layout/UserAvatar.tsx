@@ -20,7 +20,7 @@ const UserAvatar = () => {
 
   return user ? (
     <div className="flex gap-5">
-      <Button color="primary" radius="full" as={Link} href="/chat">
+      <Button color="primary" radius="full" as={Link} href="/community">
         Chat
       </Button>
       <Dropdown placement="bottom-end">
