@@ -35,7 +35,7 @@ const ChatContainer = () => {
   useEffect(() => {
     store.dispatch(getCommunityChat());
     socket.on("newChatGloble", async (e) => {
-      await store.dispatch(addMessage(e));
+      await store.dispatch(addCommunityMessage(e));
       if (scrollContainer.current && isScrolledToBottom()) {
         scrollContainer.current.scrollTop =
           scrollContainer.current.scrollHeight;
@@ -49,10 +49,7 @@ const ChatContainer = () => {
         ref={scrollContainer}
         className="grid w-full overflow-visible scroll-smooth flex-1 youtube-scroll-bar"
       >
-        <AppContainer
-          ref={scrollContainer}
-          className="flex flex-col gap-6 py-4"
-        >
+        <AppContainer className="flex flex-col gap-6 py-4 !max-w-5xl">
           {loading ? (
             <div className="flex-1 flex items-center pt-2 justify-center">
               <Spinner label="loading..." />
@@ -78,14 +75,14 @@ const ChatContainer = () => {
               <div
                 key={key}
                 aria-checked={e.userId?._id == user?._id}
-                className={"flex gap-3 aria-checked:flex-row-reverse"}
+                className={"flex gap-3 max-w-2xl w-max aria-checked:flex-row-reverse aria-checked:ml-auto"}
               >
                 <div className="relative flex-none">
                   <Avatar name={e?.userId?.username} src={e?.userId?.pic} />
                 </div>
                 <div className="flex w-full flex-col gap-4">
                   <div className="relative w-full rounded-medium bg-content2 px-4 py-3 text-default-600">
-                    <div className="flex">
+                    <div className="flex gap-4">
                       <div className="w-full text-small font-semibold text-default-foreground">
                         {e?.userId?.username}
                       </div>
@@ -103,7 +100,7 @@ const ChatContainer = () => {
           })}
         </AppContainer>
       </div>
-      <AppContainer className="pb-4 pt-0">
+      <AppContainer className="pb-4 pt-0 !max-w-5xl">
         <Textarea
           aria-label="message"
           classNames={{
