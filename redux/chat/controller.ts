@@ -46,6 +46,16 @@ const chatController = createSlice({
         addMessage(state, { payload }) {
             state.chat = [...(state.chat ?? []), payload];
         },
+
+        getCommunityChat(state, { payload }) {
+            state.communityChat = payload.data;
+        },
+        loadCommunityChat(state, { payload }) {
+            state.communityChat = [...payload.data, ...(state.communityChat ?? [])];
+        },
+        addCommunityMessage(state, { payload }) {
+            state.communityChat = [...(state.communityChat ?? []), payload];
+        },
     },
 });
 
@@ -168,3 +178,51 @@ export const removeContact = (id: string): any => async (dispatch: any) => {
         return { success: false };
     }
 };
+
+export const addCommunityMessage =
+    (data: any): any =>
+        async (dispatch: any) => {
+            try {
+                dispatch(chatController.actions.addCommunityMessage(data));
+                return { success: true };
+            } catch (e: any) {
+                dispatch(toastController.actions.showError(e));
+                return { success: false };
+            }
+        };
+
+export const loadCommunityChat =
+    (count?: number): any =>
+        async (dispatch: any) => {
+            try {
+                dispatch(chatController.actions.lazyLoading());
+                const result: any = await httpGet(constructURL(`me/chat/globle`, {
+                    count: count ?? '0',
+                    limit: '10',
+                }));
+                dispatch(chatController.actions.loadCommunityChat(result));
+                dispatch(chatController.actions.stopLazyLoading());
+                return { success: true };
+            } catch (e: any) {
+                dispatch(toastController.actions.showError(e));
+                return { success: false };
+            }
+        };
+
+export const getCommunityChat =
+    (): any =>
+        async (dispatch: any) => {
+            try {
+                dispatch(chatController.actions.lazyLoading());
+                const result: any = await httpGet(constructURL(`me/chat/globle`, {
+                    count: '0',
+                    limit: '10',
+                }));
+                dispatch(chatController.actions.getCommunityChat(result));
+                dispatch(chatController.actions.stopLazyLoading());
+                return { success: true };
+            } catch (e: any) {
+                dispatch(toastController.actions.showError(e));
+                return { success: false };
+            }
+        };

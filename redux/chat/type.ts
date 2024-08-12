@@ -10,6 +10,13 @@ export interface dataType {
         createdAt: string;
         __v: number;
     }[];
+    communityChat?: {
+        userId: UserType;
+        message: string;
+        createdAt: string;
+        _id: string;
+        __v: number;
+    }[];
     data?: {
         contacts: {
             _id: string,
