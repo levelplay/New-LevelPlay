@@ -68,7 +68,7 @@ const LeaderBoardModel: FC<DataModal> = ({ data, isLoading }) => {
             <h5 className="text-lg font-semibold text-center">
               Watch LeaderBoard
             </h5>
-            <p className="text-sm text-center text-foreground-400" onClick={() => {
+            {/* <p className="text-sm text-center text-foreground-400" onClick={() => {
               console.log(data?.data)
             }}>
               Most wins gets R100 in {data?.data ? <Timer data={data?.data} onComplete={() => {
@@ -79,7 +79,7 @@ const LeaderBoardModel: FC<DataModal> = ({ data, isLoading }) => {
                   }, 4000)
                 }
               }} /> : <></>}
-            </p>
+            </p> */}
           </div>
         </ModalHeader>
         <ModalBody className="pb-6 pt-0">
