@@ -49,16 +49,16 @@ const LeaderBoardModel: FC<DataModal> = ({ data, isLoading }) => {
             <div className="flex items-end justify-center">
               <Avatar
                 className="w-12 h-12 translate-x-[16px]"
-                name={data?.data?.users[1]?.username || ''}
+                name={data?.data?.users[1]?.username || ""}
               />
               <Avatar
                 className="w-14 h-14 z-10"
-                name={data?.data?.users[0]?.username || ''}
+                name={data?.data?.users[0]?.username || ""}
                 isBordered
               />
               <Avatar
                 className="w-12 h-12 translate-x-[-16px]"
-                name={data?.data?.users[2]?.username || ''}
+                name={data?.data?.users[2]?.username || ""}
               />
             </div>
           ) : (
@@ -84,12 +84,16 @@ const LeaderBoardModel: FC<DataModal> = ({ data, isLoading }) => {
         </ModalHeader>
         <ModalBody className="pb-6 pt-0">
           <div className="flex flex-col gap-4">
-            {isLoading ? <div className="flex item-center justify-center h-16">
-              <Spinner label="loading..." />
-            </div> : userData.length == 0 ? <div className="flex item-center justify-center h-12 underline">
-              <p>No Data Found!</p>
-            </div> : userData.map(
-              (e: any, key: any) => {
+            {isLoading ? (
+              <div className="flex item-center justify-center h-16">
+                <Spinner label="loading..." />
+              </div>
+            ) : userData.length == 0 ? (
+              <div className="flex item-center justify-center h-12 underline">
+                <p>No Data Found!</p>
+              </div>
+            ) : (
+              userData.map((e: any, key: any) => {
                 return (
                   <div
                     className="flex justify-between items-center"
@@ -101,7 +105,7 @@ const LeaderBoardModel: FC<DataModal> = ({ data, isLoading }) => {
                     </p>
                   </div>
                 );
-              }
+              })
             )}
           </div>
         </ModalBody>

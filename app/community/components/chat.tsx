@@ -100,7 +100,7 @@ const ChatContainer = () => {
                   key={key}
                   aria-checked={e.userId?._id == user?._id}
                   className={
-                    "flex gap-3 max-w-2xl w-max aria-checked:flex-row-reverse aria-checked:ml-auto"
+                    "flex gap-3 max-w-2xl min-w-96 mr-auto aria-checked:flex-row-reverse aria-checked:ml-auto aria-checked:mr-0 max-sm:min-w-0 max-sm:w-full"
                   }
                 >
                   <div className="relative flex-none">
@@ -108,12 +108,12 @@ const ChatContainer = () => {
                   </div>
                   <div className="flex w-full flex-col gap-4">
                     <div className="relative w-full rounded-medium bg-content2 px-4 py-3 text-default-600">
-                      <div className="flex gap-4">
-                        <div className="w-full text-small font-semibold text-default-foreground">
+                      <div className="flex gap-2">
+                        <div className="w-full text-small font-semibold text-default-foreground flex-1">
                           {e?.userId?.username}
                         </div>
-                        <div className="flex-end text-small whitespace-nowrap text-default-400">
-                          {format(new Date(e.createdAt), "dd,MM,yyyy - hh:mm")}
+                        <div className="flex-end text-small text-default-400 text-right h-5">
+                          {format(new Date(e.createdAt), "dd,MM,yy - hh:mm")}
                         </div>
                       </div>
                       <div className="mt-2 text-small text-default-900">
