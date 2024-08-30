@@ -21,6 +21,7 @@ const ChatContainer = () => {
   const scrollContainer = useRef<HTMLDivElement | null>(null);
   const user = useSelector((e: RootReducerType) => e?.auth?.user);
   const chatData = useSelector((e: RootReducerType) => e?.chat?.communityChat);
+  const currMode = useSelector((e: RootReducerType) => e?.model?.mode);
 
   function isScrolledToBottom() {
     if (scrollContainer.current) {
@@ -62,12 +63,9 @@ const ChatContainer = () => {
     <>
       <div
         ref={scrollContainer}
-        className="grid w-full overflow-visible scroll-smooth flex-1 youtube-scroll-bar"
-        onClick={() => {
-          console.log(isScrolledToBottom());
-        }}
+        className="grid w-full overflow-visible scroll-smooth flex-1 youtube-scroll-bar border-divider border max-md:border-0 rounded-[20px]"
       >
-        <AppContainer className="flex flex-col gap-6 py-4 !max-w-5xl">
+        <AppContainer className="flex flex-col gap-6 py-4">
           {loading ? (
             <div className="flex-1 flex items-center pt-2 justify-center">
               <Spinner label="loading..." />
@@ -79,6 +77,7 @@ const ChatContainer = () => {
             >
               <Button
                 color="primary"
+                size="lg"
                 startContent={<IoReload />}
                 onClick={() => {
                   store.dispatch(loadCommunityChat(chatData?.length));
@@ -104,19 +103,19 @@ const ChatContainer = () => {
                   }
                 >
                   <div className="relative flex-none">
-                    <Avatar name={e?.userId?.username} src={e?.userId?.pic} />
+                    <Avatar className="w-14 h-14" color="primary" name={e?.userId?.username} src={e?.userId?.pic} />
                   </div>
                   <div className="flex w-full flex-col gap-4">
-                    <div className="relative w-full rounded-medium bg-content2 px-4 py-3 text-default-600">
-                      <div className="flex gap-2">
-                        <div className="w-full text-small font-semibold text-default-foreground flex-1">
+                    <div className={`relative w-full rounded-medium p-4 bg-primary bg-opacity-60`}>
+                      <div className={`flex gap-2 items-center`}>
+                        <div className="w-full text-lg font-semibold flex-1 text-secondary">
                           {e?.userId?.username}
                         </div>
-                        <div className="flex-end text-small text-default-400 text-right h-5">
+                        <div className="flex-end text-sm text-right text-secondary opacity-80">
                           {format(new Date(e.createdAt), "dd,MM,yy - hh:mm")}
                         </div>
                       </div>
-                      <div className="mt-2 text-small text-default-900">
+                      <div className="mt-2 text-base text-secondary opacity-80">
                         {e.message}
                       </div>
                     </div>
@@ -125,57 +124,59 @@ const ChatContainer = () => {
               );
             })}
         </AppContainer>
-      </div>
-      <AppContainer className="pb-4 pt-0 !max-w-5xl">
-        <Textarea
-          aria-label="message"
-          classNames={{
-            innerWrapper: "items-center",
-            label: "hidden",
-            input: "py-0 text-medium",
-            inputWrapper: "h-15 py-[10px] pl-4 pr-3",
-          }}
-          endContent={
-            <div className="flex h-10 flex-col justify-center">
-              <Button
-                isIconOnly
-                className="bg-foreground"
-                radius="lg"
-                isDisabled={!(message.trim().length > 0)}
-                onClick={async () => {
-                  socket.emit("chat-globle", {
-                    message: message,
-                    id: user?._id,
-                  });
-                  const currentDate = new Date().toISOString();
-                  await store.dispatch(
-                    addCommunityMessage({
-                      userId: user,
+        <AppContainer className="py-4 sticky bottom-0 bg-background flex items-center justify-center">
+          <Textarea
+            aria-label="message"
+            className="max-w-4xl"
+            color="primary"
+            classNames={{
+              innerWrapper: "items-center",
+              label: "hidden",
+              input: "py-0 text-medium",
+              inputWrapper: "h-15 py-[10px] pl-4 pr-3",
+            }}
+            endContent={
+              <div className="flex h-10 flex-col justify-center">
+                <Button
+                  isIconOnly
+                  radius="lg"
+                  color="primary"
+                  isDisabled={!(message.trim().length > 0)}
+                  onClick={async () => {
+                    socket.emit("chat-globle", {
                       message: message,
-                      createdAt: currentDate,
-                    })
-                  );
-                  setMessage("");
-                  if (scrollContainer.current) {
-                    scrollContainer.current.scrollTop =
-                      scrollContainer.current.scrollHeight;
-                  }
-                }}
-              >
-                <FaArrowUp className="cursor-pointer text-default-50 text-xl" />
-              </Button>
-            </div>
-          }
-          placeholder="Type a message"
-          radius="lg"
-          minRows={0}
-          rows={0}
-          maxRows={5}
-          variant="bordered"
-          value={message}
-          onValueChange={setMessage}
-        />
-      </AppContainer>
+                      id: user?._id,
+                    });
+                    const currentDate = new Date().toISOString();
+                    await store.dispatch(
+                      addCommunityMessage({
+                        userId: user,
+                        message: message,
+                        createdAt: currentDate,
+                      })
+                    );
+                    setMessage("");
+                    if (scrollContainer.current) {
+                      scrollContainer.current.scrollTop =
+                        scrollContainer.current.scrollHeight;
+                    }
+                  }}
+                >
+                  <FaArrowUp className="cursor-pointer text-default-50 text-xl" />
+                </Button>
+              </div>
+            }
+            placeholder="Type a message"
+            radius="lg"
+            minRows={0}
+            rows={0}
+            maxRows={5}
+            variant="bordered"
+            value={message}
+            onValueChange={setMessage}
+          />
+        </AppContainer>
+      </div>
     </>
   );
 };

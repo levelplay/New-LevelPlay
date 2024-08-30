@@ -1,15 +1,18 @@
 export type modelStatus = {
-    status: modelStatusType;
-    drawer: boolean;
-    data: any;
-}
+  drawer: boolean;
+  mode?: modeVariantType;
+  status: modelStatusType;
+  data: any;
+};
+
+export type modeVariantType = "dark" | "light";
 
 export type modelStatusType =
-    'close' |
-    'signIn' |
-    'signUp' |
-    'forget-password' |
-    "new-contact" |
-    'leader-board' |
-    'game-start' |
-    'game-end';
+  | "close"
+  | "signIn"
+  | "signUp"
+  | "forget-password"
+  | "new-contact"
+  | "leader-board"
+  | "game-start"
+  | "game-end";

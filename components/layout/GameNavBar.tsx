@@ -35,21 +35,22 @@ const GameNavBar: FC<DataModel> = ({ users, activeUser, onTimeUp }) => {
   }, [activeUser]);
 
   return (
-    <header className="w-full bg-opacity-80 backdrop-blur absolute left-0 top-0 bg-[hsla(0,0%,10%,0.9)]">
-      <AppContainer className="flex items-center justify-center h-28 gap-16 max-sm:gap-8">
+    <header className="w-full absolute left-0 top-0 dark bg-[#1A1A1A] ">
+      <AppContainer className="flex items-center justify-center py-[10px] gap-16 max-sm:gap-8">
         {users.map((e, key) => {
           return (
             <div key={key} style={{ order: key }}>
               <Avatar
                 name={e.title}
                 size="lg"
+                className="w-12 h-12"
                 color={key == activeUser - 1 ? "primary" : "default"}
                 isBordered
               />
             </div>
           );
         })}
-        <div className="relative w-20 h-20 flex justify-center items-center order-[0.5]">
+        <div className="relative w-[60px] h-[60px] flex justify-center items-center order-[0.5]">
           <Doughnut
             className="absolute top-0 left-0 !w-full !h-full"
             data={{
@@ -64,7 +65,7 @@ const GameNavBar: FC<DataModel> = ({ users, activeUser, onTimeUp }) => {
               ],
             }}
           />
-          <p className=" text-lg font-medium">{time}</p>
+          <p className="text-base pt-0.5 font-medium text-foreground">{time}</p>
         </div>
       </AppContainer>
     </header>

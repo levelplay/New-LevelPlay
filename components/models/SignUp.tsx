@@ -10,6 +10,7 @@ import {
   ModalBody,
   ModalContent,
   ModalFooter,
+  ModalHeader,
 } from "@nextui-org/react";
 import { FormProvider, useForm } from "react-hook-form";
 import { useSelector } from "react-redux";
@@ -26,8 +27,18 @@ const SignUpModel = () => {
       .string()
       .email("Invalid email address")
       .required("This field is required"),
-    username: yup.string().required("This field is required"),
-    password: yup.string().required("This field is required")
+    username: yup
+      .string()
+      .required("This field is required")
+      .max(14, "Length must between 5 to 14")
+      .min(5, "Length must between 5 to 14"),
+    password: yup.string().required("This field is required"),
+    conformPassword: yup
+      .string()
+      .oneOf(
+        [yup.ref("password")],
+        "Password and conform password must be same"
+      ),
   });
 
   const formMethods = useForm({
@@ -62,21 +73,26 @@ const SignUpModel = () => {
   return (
     <Modal
       isOpen={state == "signUp"}
+      backdrop="blur"
       onClose={() => {
         store.dispatch(closeModel());
         reset({});
       }}
     >
-      <ModalContent>
+      <ModalContent className="border border-black dark:border-white">
         <FormProvider {...formMethods}>
           <form onSubmit={submitForm}>
-            <ModalBody>
-              <h6 className="text-xl pt-5 pb-3 font-medium">Sign Up</h6>
+            <ModalHeader className="pb-8 pt-16 gap-2 flex-col">
+              <h6 className="text-4xl font-bold">Sign In</h6>
+              <p className="text-base font-normal">Glad you’re back.!</p>
+            </ModalHeader>
+            <ModalBody className="gap-6 pt-0">
               <FormTextField
                 name="username"
                 inputProps={{
                   label: "User Name",
-                  placeholder: "Enter your user name",
+                  variant: "bordered",
+                  color: "primary",
                 }}
               />
               <FormTextField
@@ -84,7 +100,8 @@ const SignUpModel = () => {
                 inputProps={{
                   label: "Email",
                   type: "email",
-                  placeholder: "Enter your email",
+                  variant: "bordered",
+                  color: "primary",
                 }}
               />
               {/* <FormTextField
@@ -124,32 +141,41 @@ const SignUpModel = () => {
                 name="password"
                 inputProps={{
                   label: "Password",
-                  placeholder: "Create your password",
+                  variant: "bordered",
+                  color: "primary",
                 }}
               />
-            </ModalBody>
-            <ModalFooter className="flex-col">
-              <Button
-                isLoading={loading}
-                color="primary"
-                type="submit"
-                className="my-2"
-                fullWidth
-              >
-                Continue
-              </Button>
-              <p className=" text-center text-sm py-3">
-                {"Already have an account?"}{" "}
-                <span
-                  onClick={() => {
-                    store.dispatch(changeModelStatus("signIn"));
-                  }}
-                  className="cursor-pointer text-primary hover:underline"
+              <FormPasswordField
+                name="conformPassword"
+                inputProps={{
+                  label: "Conform Password",
+                  variant: "bordered",
+                  color: "primary",
+                }}
+              />
+              <div className="w-full flex flex-col gap-6 pb-10 pt-8">
+                <Button
+                  isLoading={loading}
+                  color="primary"
+                  type="submit"
+                  size="lg"
+                  fullWidth
                 >
-                  Sign In
-                </span>
-              </p>
-            </ModalFooter>
+                  Sign Up
+                </Button>
+                <p className=" text-center text-sm py-3">
+                  {"Already Registered?"}{" "}
+                  <span
+                    onClick={() => {
+                      store.dispatch(changeModelStatus("signIn"));
+                    }}
+                    className="cursor-pointer text-primary hover:underline ml-1 font-bold"
+                  >
+                    Login
+                  </span>
+                </p>
+              </div>
+            </ModalBody>
           </form>
         </FormProvider>
       </ModalContent>

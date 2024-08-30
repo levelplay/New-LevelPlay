@@ -44,52 +44,69 @@ const LeaderBoardModel: FC<DataModal> = ({ data, isLoading }) => {
       }}
     >
       <ModalContent>
-        <ModalHeader className="flex-col pt-6">
+        <ModalHeader className="flex-col pt-10 pb-0">
           {data?.data?.users ? (
-            <div className="flex items-end justify-center">
+            <div className="flex justify-center gap-5">
               <Avatar
-                className="w-12 h-12 translate-x-[16px]"
+                color="primary"
+                className="w-16 h-16 bg-transparent text-primary"
                 name={data?.data?.users[1]?.username || ""}
+                isBordered
               />
               <Avatar
-                className="w-14 h-14 z-10"
+                color="primary"
+                className="w-16 h-16 bg-transparent text-primary"
                 name={data?.data?.users[0]?.username || ""}
                 isBordered
               />
               <Avatar
-                className="w-12 h-12 translate-x-[-16px]"
+                color="primary"
+                className="w-16 h-16 bg-transparent text-primary"
                 name={data?.data?.users[2]?.username || ""}
+                isBordered
               />
             </div>
           ) : (
             <></>
           )}
-          <div className="flex flex-col gap-1 py-4">
-            <h5 className="text-lg font-semibold text-center">
+          <div className="flex flex-col gap-3 pt-6 pb-8">
+            <h5 className="text-2xl font-bold text-center">
               Watch LeaderBoard
             </h5>
-            {/* <p className="text-sm text-center text-foreground-400" onClick={() => {
-              console.log(data?.data)
-            }}>
-              Most wins gets R100 in {data?.data ? <Timer data={data?.data} onComplete={() => {
-                store.dispatch(showErrorThunk('Dear users round has been over'));
-                if (userData.length > 0) {
-                  setTimeout(() => {
-                    store.dispatch(showSuccessThunk(`This round winner is ${userData[0]?.username}`));
-                  }, 4000)
-                }
-              }} /> : <></>}
-            </p> */}
+            <p className="text-lg text-center font-normal text-foreground/70">
+              Most wins gets R100 in{" "}
+              {data?.data ? (
+                <Timer
+                  data={data?.data}
+                  onComplete={() => {
+                    store.dispatch(
+                      showErrorThunk("Dear users round has been over")
+                    );
+                    if (userData.length > 0) {
+                      setTimeout(() => {
+                        store.dispatch(
+                          showSuccessThunk(
+                            `This round winner is ${userData[0]?.username}`
+                          )
+                        );
+                      }, 4000);
+                    }
+                  }}
+                />
+              ) : (
+                <></>
+              )}
+            </p>
           </div>
         </ModalHeader>
-        <ModalBody className="pb-6 pt-0">
+        <ModalBody className="pb-8 pt-0">
           <div className="flex flex-col gap-4">
             {isLoading ? (
               <div className="flex item-center justify-center h-16">
                 <Spinner label="loading..." />
               </div>
             ) : userData.length == 0 ? (
-              <div className="flex item-center justify-center h-12 underline">
+              <div className="flex item-center text-xl font-bold justify-center underline">
                 <p>No Data Found!</p>
               </div>
             ) : (

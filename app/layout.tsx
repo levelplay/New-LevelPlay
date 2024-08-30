@@ -1,12 +1,8 @@
-import type { Metadata } from "next";
-import { Inter } from "next/font/google";
-import CustomLayer from "@/theme/CustomLayer";
 import Script from "next/script";
-import "../theme/globals.css";
+import Initializer from "./Initializer";
 import { appMetaData } from "@/constants/metaData";
 import { appFont } from "@/theme/theme";
-import SafetyLayer from "@/components/layout/SafetyLayer";
-import SplashScreen from "@/components/layout/SplashScreen";
+import "../theme/globals.css";
 
 export const metadata = appMetaData.main;
 
@@ -15,18 +11,12 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const rootClassName = `${appFont.className} light text-foreground bg-background">`;
+
   return (
-    <html
-      lang="en"
-      className="dark text-foreground bg-background w-full min-h-full"
-    >
-      <body
-        className={`${appFont.className} dark text-foreground bg-background`}
-      >
-        <SafetyLayer isReverse>
-          <SplashScreen />
-        </SafetyLayer>
-        <CustomLayer>{children}</CustomLayer>
+    <html lang="en" className={rootClassName}>
+      <body className={rootClassName}>
+        <Initializer>{children}</Initializer>
       </body>
       <Script
         async

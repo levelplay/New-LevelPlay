@@ -27,6 +27,7 @@ export const authReducer = createSlice({
             localStorage.removeItem('token');
             localStorage.removeItem('refreshToken');
             localStorage.removeItem('user');
+            localStorage.removeItem('curr-mode');
             cookies.remove('token');
             cookies.remove('refreshToken');
             state.token = undefined;

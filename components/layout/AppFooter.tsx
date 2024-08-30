@@ -29,16 +29,16 @@ const AppFooter = () => {
   ];
 
   return (
-    <footer className="w-full bg-[hsla(0,0%,10%)] py-5">
+    <footer className="w-full dark bg-[#1A1A1A] py-5">
       <AppContainer>
         <div className="flex justify-between items-center">
           <h3
-            className="text-2xl max-sm:text-xl font-semibold"
+            className="text-2xl max-sm:text-xl font-semibold text-foreground"
             style={{ letterSpacing: "4px" }}
           >
             LevelPlay
           </h3>
-          <div className="text-stone-300 text-sm font-normal max-md:hidden">
+          <div className="text-sm font-normal max-md:hidden text-foreground">
             © LevelPlay - All Rights Reserved
           </div>
           <div className="flex gap-3 max-sm:gap-1">
@@ -47,11 +47,12 @@ const AppFooter = () => {
                 <Button
                   key={key}
                   variant="light"
+                  color="primary"
                   size="sm"
                   radius="full"
                   isIconOnly
                 >
-                  <e.icon className="text-white text-base" />
+                  <e.icon className="text-base" />
                 </Button>
               );
             })}

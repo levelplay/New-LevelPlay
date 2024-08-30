@@ -1,19 +1,16 @@
-import Image from "next/image";
-import React from "react";
-
 const SplashScreen = () => {
   return (
-    <main className="w-[100vw] h-[100vh] bg-black flex items-center justify-center flex-col gap-8 fixed top-0 left-0 z-[1000]">
+    <main className="w-[100vw] h-[100vh] bg-white flex items-center justify-center flex-col gap-8 fixed top-0 left-0 z-[1000] dark:bg-black">
       <div className="flex gap-8 items-center justify-center w-full h-full absolute top-0 left-0 flex-col">
         <h3
-          className="text-4xl font-semibold text-nowrap"
+          className="text-4xl font-semibold text-nowrap text-zinc-900 dark:text-white"
           style={{ letterSpacing: "4px" }}
         >
           LevelPlay
         </h3>
         <svg
           aria-hidden="true"
-          className="inline w-8 h-8 text-gray-800 animate-spin fill-white"
+          className="inline w-8 h-8 text-gray-100 dark:text-gray-800 animate-spin fill-zinc-900 dark:fill-white"
           viewBox="0 0 100 101"
           fill="none"
           xmlns="http://www.w3.org/2000/svg"

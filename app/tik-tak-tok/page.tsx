@@ -2,7 +2,13 @@
 import { socket } from "@/components/core/SocketComponent";
 import GameNavBar from "@/components/layout/GameNavBar";
 import SafetyLayer from "@/components/layout/SafetyLayer";
-import { circleMark, crossMark, emptyMark, whiteFavicon } from "@/public/images";
+import {
+  circleDark,
+  crossDark,
+  circleLight,
+  crossLight,
+  emptyMark,
+} from "@/public/images";
 import { changeModelStatus } from "@/redux/model/controller";
 import { RootReducerType, store } from "@/redux/store";
 import { Button } from "@nextui-org/react";
@@ -13,7 +19,6 @@ import { useSelector } from "react-redux";
 import { useRouter } from "next/navigation";
 
 // config
-const playerIcon = [emptyMark.src, crossMark.src, circleMark.src];
 const deviceWidth = typeof window == "undefined" ? 0 : window.innerWidth;
 const deviceHeight = typeof window == "undefined" ? 0 : window.innerHeight;
 const boxWidth = deviceWidth < 600 ? 100 : 125;
@@ -73,6 +78,11 @@ const TikTakTokGame = (data: any) => {
   const username = data.searchParams["username"];
   const player = data.searchParams["player"];
   const user = useSelector((e: RootReducerType) => e.auth.user);
+  const currMode = useSelector((e: RootReducerType) => e.model.mode);
+  const playerIcon =
+    currMode == "dark"
+      ? [emptyMark.src, crossDark.src, circleDark.src]
+      : [emptyMark.src, crossLight.src, circleLight.src];
   const [containerData, setContainerData] = useState([
     [0, 0, 0],
     [0, 0, 0],
@@ -173,7 +183,7 @@ const TikTakTokGame = (data: any) => {
             username: username,
           })
         );
-      router.replace("/");
+        router.replace("/");
       }
       setCurrentTurn(data.turn);
     });
@@ -200,8 +210,7 @@ const TikTakTokGame = (data: any) => {
   });
 
   return (
-    <main
-    >
+    <main className="relative">
       <GameNavBar
         activeUser={player ? currentTurn : turn}
         onTimeUp={onTimeUp}
@@ -229,13 +238,13 @@ const TikTakTokGame = (data: any) => {
           height={deviceHeight}
           options={{
             hello: true,
-            backgroundColor: 0x141414,
+            backgroundColor: currMode == "dark" ? 0x000000 : 0xffffff,
           }}
         >
           <Container
             position={[
               deviceWidth / 2 - boxWidth * 1.6,
-              deviceHeight / 2 - boxWidth * 1.3,
+              deviceHeight / 2 - boxWidth * 1.6,
             ]}
           >
             {[1, 2].map((e, key) => {
@@ -244,7 +253,7 @@ const TikTakTokGame = (data: any) => {
                   key={key}
                   draw={(g) => {
                     g.clear();
-                    g.beginFill(0xffffff, 1);
+                    g.beginFill(currMode == "dark" ? 0xffffff : 0x000000, 1);
                     g.drawRoundedRect(
                       0,
                       boxWidth * e + dividerWidth * key,
@@ -262,7 +271,7 @@ const TikTakTokGame = (data: any) => {
                   key={key}
                   draw={(g) => {
                     g.clear();
-                    g.beginFill(0xffffff, 1);
+                    g.beginFill(currMode == "dark" ? 0xffffff : 0x000000, 1);
                     g.drawRoundedRect(
                       boxWidth * e + dividerWidth * key,
                       0,
@@ -282,7 +291,7 @@ const TikTakTokGame = (data: any) => {
                       <Sprite
                         key={`${p_key}${c_key}`}
                         interactive={true}
-                        ontap={()=>{
+                        ontap={() => {
                           onAction(c_item, c_key, p_key);
                         }}
                         onclick={() => {
@@ -302,14 +311,15 @@ const TikTakTokGame = (data: any) => {
           </Container>
         </Stage>
       </SafetyLayer>
-      <div className=" absolute w-full py-6 bottom-0 left-0 flex justify-center items-center z">
+      <div className="absolute w-full py-4 bottom-0 left-0 flex justify-center items-center dark bg-[#1A1A1A] ">
         <Button
           onClick={(e) => {
             socket.emit("quit", "");
             router.replace("/");
           }}
+          size="lg"
           color="danger"
-          className=" w-40"
+          className=" w-48 bg-[#C90000]"
         >
           Quit
         </Button>

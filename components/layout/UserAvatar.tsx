@@ -9,14 +9,16 @@ import {
   DropdownMenu,
   DropdownItem,
   User,
+  Switch,
 } from "@nextui-org/react";
 import { useSelector } from "react-redux";
-import { changeModelStatus } from "@/redux/model/controller";
+import { changeMode, changeModelStatus } from "@/redux/model/controller";
 import { logout } from "@/redux/auth/controller";
 import Link from "next/link";
 
 const UserAvatar = () => {
   const user = useSelector((e: RootReducerType) => e?.auth?.user);
+  const currMode = useSelector((e: RootReducerType) => e.model.mode);
 
   return user ? (
     <div className="flex gap-5">
@@ -36,20 +38,31 @@ const UserAvatar = () => {
           <DropdownItem key="profile" className="h-14 gap-2">
             <User description={user.email} name={user?.username} />
           </DropdownItem>
-          {/* <DropdownItem
-          onClick={() => {
-            store.dispatch(changeModelStatus("game-start"));
-          }}
-        >
-          Play Now
-        </DropdownItem>
-        <DropdownItem
-          onClick={() => {
-            store.dispatch(changeModelStatus("leader-board"));
-          }}
-        >
-          Leaderboard
-        </DropdownItem> */}
+          <DropdownItem
+            onClick={() => {
+              if (currMode == "dark") {
+                store.dispatch(changeMode("light"));
+              } else {
+                store.dispatch(changeMode("dark"));
+              }
+            }}
+            endContent={
+              <Switch
+                size="sm"
+                color="default"
+                onValueChange={(e) => {
+                  if (e) {
+                    store.dispatch(changeMode("dark"));
+                  } else {
+                    store.dispatch(changeMode("light"));
+                  }
+                }}
+                isSelected={currMode == "dark"}
+              />
+            }
+          >
+            Dark Mode
+          </DropdownItem>
           <DropdownItem
             color="danger"
             onClick={() => {

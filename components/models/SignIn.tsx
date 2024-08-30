@@ -10,6 +10,7 @@ import {
   ModalBody,
   ModalContent,
   ModalFooter,
+  ModalHeader,
 } from "@nextui-org/react";
 import { FormProvider, useForm } from "react-hook-form";
 import { useSelector } from "react-redux";
@@ -52,62 +53,65 @@ const SignInModel = () => {
   return (
     <Modal
       isOpen={state == "signIn"}
+      backdrop="blur"
       onClose={() => {
         store.dispatch(closeModel());
         reset({});
       }}
     >
-      <ModalContent>
+      <ModalContent className="border border-black dark:border-white">
         <FormProvider {...formMethods}>
           <form onSubmit={submitForm}>
-            <ModalBody>
-              <h6 className="text-xl pt-5 pb-3 font-medium">Sign in</h6>
+            <ModalHeader className="pb-8 pt-16 gap-2 flex-col">
+              <h6 className="text-4xl font-bold">Sign In</h6>
+              <p className="text-base font-normal">Glad you’re back.!</p>
+            </ModalHeader>
+            <ModalBody className="gap-[30px] pt-0">
               <FormTextField
                 name="email"
                 inputProps={{
                   label: "Email",
                   type: "email",
-                  placeholder: "Enter your email",
+                  variant: "bordered",
+                  color: "primary",
                 }}
               />
-              <div className="flex flex-col gap-2 pb-1">
-                <FormPasswordField
-                  name="password"
-                  inputProps={{
-                    label: "Password",
-                    placeholder: "Enter your password",
+              <FormPasswordField
+                name="password"
+                inputProps={{
+                  label: "Password",
+                  variant: "bordered",
+                  color: "primary",
+                }}
+              />
+              <div className="w-full flex flex-col gap-3 pt-8">
+                <Button
+                  isLoading={loading}
+                  color="primary"
+                  type="submit"
+                  size="lg"
+                  fullWidth
+                >
+                  Sign In
+                </Button>
+                <p
+                  className="text-base text-center cursor-pointer hover:underline"
+                  onClick={() => {
+                    store.dispatch(changeModelStatus("forget-password"));
                   }}
-                />
-                <div className="flex px-2 justify-between">
-                  <div />
-                  <p
-                    className="opacity-80 text-xs cursor-pointer hover:underline"
-                    onClick={() => {
-                      store.dispatch(changeModelStatus("forget-password"));
-                    }}
-                  >
-                    Forgot password?
-                  </p>
-                </div>
+                >
+                  Forgot password?
+                </p>
               </div>
             </ModalBody>
-            <ModalFooter className="flex-col">
-              <Button
-                isLoading={loading}
-                color="primary"
-                type="submit"
-                className="my-2"
-                fullWidth
-              >
-                Continue
-              </Button>
-              <p className=" text-center text-sm py-3">
-                {"Don't have an account?"}{" "}
+            <ModalFooter className="flex-col pt-12 pb-16">
+              <p className=" text-center text-base">
+                Don’t have an account ?
                 <span
                   onClick={() => {
                     store.dispatch(changeModelStatus("signUp"));
                   }}
-                  className="cursor-pointer text-primary hover:underline"
+                  className="cursor-pointer text-primary hover:underline ml-1 font-bold"
                 >
                   Sign Up
                 </span>

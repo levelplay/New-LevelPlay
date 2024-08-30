@@ -14,6 +14,8 @@ import Image from "next/image";
 import { gameDraw, gameWin, gameLose } from "@/public/images";
 import { socket } from "../core/SocketComponent";
 import { updateLoading } from "@/redux/socket/controller";
+import { FaCheck } from "react-icons/fa6";
+import { MdOutlineClose, MdOutlineQuestionMark } from "react-icons/md";
 
 const GameEndModel = () => {
   const { router } = useAppTheme();
@@ -25,73 +27,61 @@ const GameEndModel = () => {
   const components: any = {
     win: (
       <>
-        <Image
-          src={gameWin}
-          alt="Victory-Logo"
-          width={200}
-          height={100}
-          className="h-auto w-[90%]"
-        />
-        <h6 className=" text-xl text-center">
-          {" "}
-          {stateData?.username
-            ? user?.username
-            : `Player ${stateData?.player}`}{" "}
-          win
+        <div className="flex justify-center items-center bg-primary text-secondary border-secondary/60 border-3 absolute top-[-22%] left-1/2 translate-x-[-50%] w-24 h-24 rounded-full text-6xl">
+          <FaCheck />
+        </div>
+        <div />
+        <h6 className="text-2xl text-center text-foreground font-bold">
+          Success
         </h6>
+        <p className="text-center text-sm ">Successfully complete the game</p>
       </>
     ),
     lose: (
       <>
-        <Image
-          src={gameLose}
-          alt="Defeat-Logo"
-          width={200}
-          height={100}
-          className="h-auto w-[90%]"
-        />
-        <h6 className=" text-xl text-center">
-          {" "}
-          {stateData?.username
-            ? user?.username
-            : `Player ${stateData?.player}`}{" "}
-          defeat
+        <div className="flex justify-center items-center bg-primary text-secondary border-secondary/60 border-3 absolute top-[-22%] left-1/2 translate-x-[-50%] w-24 h-24 rounded-full text-6xl">
+          <MdOutlineClose />
+        </div>
+        <div />
+        <h6 className="text-2xl text-center text-foreground font-bold">
+          Defeat
         </h6>
+        <p className="text-center text-sm ">Fail to complete the game.</p>
       </>
     ),
     draw: (
-      <Image
-        src={gameDraw}
-        alt="Defeat-Logo"
-        width={200}
-        height={100}
-        className="h-auto w-[90%]"
-      />
+      <>
+        <div className="flex justify-center items-center bg-primary text-secondary border-secondary/60 border-3 absolute top-[-22%] left-1/2 translate-x-[-50%] w-24 h-24 rounded-full text-6xl">
+          <MdOutlineQuestionMark />
+        </div>
+        <div />
+        <h6 className="text-2xl text-center text-foreground font-bold">Draw</h6>
+        <p className="text-center text-sm ">The game has draw end.</p>
+      </>
     ),
   };
 
   return (
     <Modal
       isOpen={state == "game-end"}
-      classNames={{
-        base: "bg-black",
-      }}
+      backdrop="blur"
       hideCloseButton
       size="sm"
       radius="lg"
     >
-      <ModalContent>
-        <ModalBody className="py-6 pb-4 flex justify-center items-center">
+      <ModalContent className="overflow-visible border border-black dark:border-white">
+        <ModalBody className="py-0 flex justify-center items-center flex-col gap-5 pt-12">
           {components[stateData?.status ?? 2]}
+          {components["draw"]}
         </ModalBody>
-        <ModalFooter>
+        <ModalFooter className="gap-4 p-4 pt-8">
           <Button
             onClick={() => {
               store.dispatch(closeModel());
             }}
             isLoading={loading}
             color="primary"
-            variant="flat"
+            variant="bordered"
             className="flex-1"
             fullWidth
           >

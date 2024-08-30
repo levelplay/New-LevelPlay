@@ -10,6 +10,7 @@ import {
   ModalBody,
   ModalContent,
   ModalFooter,
+  ModalHeader,
 } from "@nextui-org/react";
 import { FormProvider, useForm } from "react-hook-form";
 import { useSelector } from "react-redux";
@@ -52,24 +53,27 @@ const ForgetPasswordModel = () => {
   return (
     <Modal
       isOpen={state == "forget-password"}
+      backdrop="blur"
       onClose={() => {
         store.dispatch(closeModel());
         reset({});
       }}
     >
-      <ModalContent>
+      <ModalContent className="border border-black dark:border-white">
         <FormProvider {...formMethods}>
           <form onSubmit={submitForm}>
-            <ModalBody>
-              <h6 className="text-xl pt-5 pb-3 font-medium">
-                Forget Password
-              </h6>
+            <ModalHeader className="pb-8 pt-16 gap-2 flex-col">
+              <h6 className="text-3xl font-bold">Forget Password</h6>
+              <p className="text-base font-normal">Glad you’re back.!</p>
+            </ModalHeader>
+            <ModalBody className="gap-6 pt-0">
               <FormTextField
                 name="email"
                 inputProps={{
                   label: "Email",
                   type: "email",
-                  placeholder: "Enter your email",
+                  variant: "bordered",
+                  color: "primary",
                 }}
               />
               <FormTextField
@@ -77,18 +81,22 @@ const ForgetPasswordModel = () => {
                 inputProps={{
                   label: "Verification Code",
                   type: "number",
-                  placeholder: "Enter verification code",
+                  variant: "bordered",
+                  color: "primary",
                   endContent: (
-                    <Button 
-                    isLoading={loading}
-                    onClick={()=>{
-                      store.dispatch(
-                        SendTokenThunk({
-                          email: getValues("email") || "",
-                          type: 2,
-                        })
-                      );
-                    }} color="primary" className="h-full w-36">
+                    <Button
+                      isLoading={loading}
+                      onClick={() => {
+                        store.dispatch(
+                          SendTokenThunk({
+                            email: getValues("email") || "",
+                            type: 2,
+                          })
+                        );
+                      }}
+                      color="primary"
+                      className="h-full w-36"
+                    >
                       Send Code
                     </Button>
                   ),
@@ -98,15 +106,30 @@ const ForgetPasswordModel = () => {
                 name="password"
                 inputProps={{
                   label: "Password",
-                  placeholder: "Create new password",
+                  variant: "bordered",
+                  color: "primary",
                 }}
               />
+              <FormPasswordField
+                name="conformPassword"
+                inputProps={{
+                  label: "Conform Password",
+                  variant: "bordered",
+                  color: "primary",
+                }}
+              />
+              <div className="w-full flex flex-col gap-6 pb-10 pt-8">
+                <Button
+                  isLoading={loading}
+                  color="primary"
+                  type="submit"
+                  size="lg"
+                  fullWidth
+                >
+                  Change Password
+                </Button>
+              </div>
             </ModalBody>
-            <ModalFooter>
-              <Button isLoading={loading} color="primary" type="submit" className="my-2" fullWidth>
-                Continue
-              </Button>
-            </ModalFooter>
           </form>
         </FormProvider>
       </ModalContent>
