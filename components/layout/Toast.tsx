@@ -1,16 +1,15 @@
 "use client";
 import { RootReducerType, store } from "@/redux/store";
 import { Button } from "@nextui-org/react";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { MdClose } from "react-icons/md";
 import {
   showChallengeThunk,
   showErrorThunk,
   showSuccessThunk,
-  showWarningThunk,
 } from "@/redux/toast/controller";
-import { FaCheck, FaFantasyFlightGames } from "react-icons/fa6";
+import { FaCheck } from "react-icons/fa6";
 import { socket } from "../core/SocketComponent";
 
 const AppToast = () => {
@@ -20,6 +19,9 @@ const AppToast = () => {
   const [successMessage, setSuccessMessage] = useState(false);
   const [challengeMessage, setChallengeMessage] = useState(false);
   const activeTime = 5000;
+  const challengeUser: any = state?.challenge
+    ? JSON.parse(state?.challenge)
+    : {};
 
   useEffect(() => {
     if (state.error != "") {
@@ -124,19 +126,25 @@ const AppToast = () => {
       <div
         id="toast-challenge"
         aria-checked={challengeMessage}
-        className="flex items-center max-w-full w-fit max-sm:w-[calc(100%-32px)] px-2 py-2 gap-3 text-gray-500 bg-white rounded-lg  shadow-md fixed bottom-6 left-6 max-sm:bottom-4 max-sm:left-4 max-sm:right-4  scale-0 opacity-0 aria-checked:scale-100 aria-checked:opacity-100 duration-100 z-[1000000]"
+        className="flex justify-center overflow-hidden bg-secondary min-w-60 flex-col max-w-full w-fit max-sm:w-[calc(100%-32px)] pb-4 gap-2 text-gray-500 rounded-lg  shadow-md fixed bottom-6 left-6 max-sm:bottom-4 max-sm:left-4 max-sm:right-4  scale-0 opacity-0 aria-checked:scale-100 aria-checked:opacity-100 duration-100 z-[1000000]"
       >
-        <div className="inline-flex items-center justify-center text-2xl flex-shrink-0 w-8 h-8 text-orange-500 bg-gray-100 rounded-lg">
+        {/* <div className="inline-flex items-center justify-center text-2xl flex-shrink-0 w-8 h-8 text-orange-500 bg-gray-100 rounded-lg">
           <FaFantasyFlightGames />
+        </div> */}
+        <div className="w-full h-7 px-4 gap-1.5 flex items-center bg-primary">
+          <span className="h-2 w-2 rounded-full bg-danger" />
+          <span className="h-2 w-2 rounded-full bg-warning" />
+          <span className="h-2 w-2 rounded-full bg-success" />
         </div>
-        <div className="text-sm font-normal text-ellipsis overflow-hidden whitespace-nowrap text-zinc-900 flex-1">
-          {state.challenge}
+        <div className="text-base font-medium px-4 text-ellipsis overflow-hidden whitespace-nowrap text-foreground">
+          {challengeUser?.username}
         </div>
-        <div className="flex gap-1">
+        <div className="flex gap-2 justify-end w-full px-4">
           <Button
             color="danger"
             variant="flat"
             size="sm"
+            radius="full"
             className="text-lg"
             isIconOnly
             onClick={() => {
@@ -144,7 +152,7 @@ const AppToast = () => {
               store.dispatch(showChallengeThunk(""));
               socket.emit(
                 "reject",
-                JSON.stringify({ user: state.challenge, accept: true })
+                JSON.stringify({ user: challengeUser.email, accept: true })
               );
             }}
           >
@@ -154,6 +162,7 @@ const AppToast = () => {
             color="success"
             size="sm"
             variant="flat"
+            radius="full"
             className="text-lg"
             isIconOnly
             onClick={() => {
@@ -161,7 +170,7 @@ const AppToast = () => {
               store.dispatch(showChallengeThunk(""));
               socket.emit(
                 "challenge",
-                JSON.stringify({ user: state.challenge, accept: true })
+                JSON.stringify({ user: challengeUser.email, accept: true })
               );
             }}
           >
