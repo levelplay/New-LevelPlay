@@ -72,7 +72,6 @@ const GameEndModel = () => {
       <ModalContent className="overflow-visible border border-black dark:border-white">
         <ModalBody className="py-0 flex justify-center items-center flex-col gap-5 pt-12">
           {components[stateData?.status ?? 2]}
-          {components["draw"]}
         </ModalBody>
         <ModalFooter className="gap-4 p-4 pt-8">
           <Button
